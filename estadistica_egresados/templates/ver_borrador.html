@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tabla Preliminar</title>
+</head>
+<body>
+<h2>Respuestas en Borrador</h2>
+<form method="POST">
+    {% csrf_token %}
+    {% if messages %}
+    {% for message in messages %}
+        <p style="color: green;">{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+
+    <table border="1">
+        <tr>
+            <th>Seleccionar</th>
+            <th>Correo</th>
+            <th>Nombres</th>
+        </tr>
+        {% for respuesta in respuestas %}
+        <tr>
+            <td><input type="checkbox" name="seleccionadas" value="{{ respuesta.id }}"></td>
+            <td>{{ respuesta.correo }}</td>
+            <td>{{ respuesta.apellidos }},{{ respuesta.nombres }} </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <button type="submit">Exportar seleccionadas</button>
+</form>
+</body>
+</html>
