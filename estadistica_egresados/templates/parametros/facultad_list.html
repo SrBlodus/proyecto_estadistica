@@ -1,0 +1,19 @@
+<h2>Listado de Facultades</h2>
+<a href="{% url 'facultad_create' %}">Agregar nueva facultad</a>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Descripción</th>
+        <th>Acciones</th>
+    </tr>
+    {% for facultad in facultades %}
+    <tr>
+        <td>{{ facultad.id_facultad }}</td>
+        <td>{{ facultad.descripcion }}</td>
+        <td>
+            <a href="{% url 'facultad_update' facultad.id_facultad %}">Editar</a> |
+            <a href="{% url 'facultad_delete' facultad.id_facultad %}">Eliminar</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>

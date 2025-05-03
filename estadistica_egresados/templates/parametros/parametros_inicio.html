@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Definición de Parámetros</title>
+</head>
+<body>
+    <h2>Gestión de Parámetros</h2>
+    <p>Selecciona la opción que deseas administrar:</p>
+
+    <div style="display: flex; gap: 20px;">
+        <a href="{% url 'campus_sede_list' %}">
+            <button>🏫 Campus/Sedes</button>
+        </a>
+        <a href="{% url 'facultad_list' %}">
+            <button>📚 Facultades</button>
+        </a>
+        <a href="{% url 'carrera_list' %}">
+            <button>🎓 Carreras</button>
+        </a>
+    </div>
+</body>
+</html>

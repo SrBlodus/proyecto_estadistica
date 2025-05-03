@@ -1,0 +1,7 @@
+<h2>{% if object %}Editar Campus/Sede{% else %}Nuevo Campus/Sede{% endif %}</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar</button>
+</form>
+<a href="{% url 'campus_sede_list' %}">Volver</a>

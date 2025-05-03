@@ -1,0 +1,19 @@
+<h2>Listado de Sedes/Campus</h2>
+<a href="{% url 'campus_sede_create' %}">Agregar nueva Sede/Campus</a>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Descripción</th>
+        <th>Acciones</th>
+    </tr>
+    {% for campus_sedes in campus_sedes %}
+    <tr>
+        <td>{{ campus_sedes.id_campus_sede }}</td>
+        <td>{{ campus_sedes.descripcion }}</td>
+        <td>
+            <a href="{% url 'campus_sede_update' campus_sedes.id_campus_sede %}">Editar</a>
+            <a href="{% url 'campus_sede_delete' campus_sedes.id_campus_sede %}">Eliminar</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
