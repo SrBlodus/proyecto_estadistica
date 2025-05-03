@@ -29,6 +29,7 @@ def importar_csv(request):
                         campus_sede=campus_sede_obj
                     ).exists()
 
+
                     estado = "D" if existe else "P"
 
                     # Guardar en el borrador con valores sin convertir
@@ -66,31 +67,47 @@ def ver_borrador(request):
         seleccionadas = request.POST.getlist("seleccionadas")
 
         for id_respuesta in seleccionadas:
-            borrador = Respuesta_borrador.objects.get(id=id_respuesta)
+            try:
+                borrador = Respuesta_borrador.objects.get(id=id_respuesta)
 
+                # 🔹 Convertir facultad, carrera y campus_sede a sus respectivos IDs
+                facultad_obj = Facultad.objects.filter(descripcion=borrador.facultad).first()
+                carrera_obj = Carrera.objects.filter(descripcion=borrador.carrera).first()
+                campus_sede_obj = CampusSede.objects.filter(descripcion=borrador.campus_sede).first()
 
-            Respuesta_oficial.objects.create(
-                correo = borrador.correo,
-                nro_telefono = borrador.nro_telefono,
-                nombres = borrador.nombres,
-                apellidos= borrador.apellidos,
-                nro_documento= borrador.nro_documento,
-                genero= borrador.genero,
-                ciudad=borrador.ciudad,
-                estado_civil=borrador.estado_civil,
-                campus_sede=borrador.campus_sede,
-                facultad=borrador.facultad,
-                carrera=borrador.carrera,
-                ano_ingreso=borrador.ano_ingreso,
-                ano_egreso=borrador.ano_egreso,
-                ano_primer_empleo=borrador.ano_primer_empleo,
-                ano_primer_empleo_carrera=borrador.ano_primer_empleo_carrera,
-            )
-            borrador.estado = "E"  # Marcamos como exportado
-            borrador.save()
+                # 🔹 Validación para evitar errores si no encuentra los IDs
+                if not facultad_obj or not carrera_obj or not campus_sede_obj:
+                    messages.error(request, f"Error en ID {id_respuesta}: Facultad, Carrera o Campus no encontrados.")
+                    continue  # Saltar al siguiente registro
+
+                # 🔹 Crear el registro en `Respuesta_oficial` con los IDs en lugar de los nombres
+                Respuesta_oficial.objects.create(
+                    correo=borrador.correo,
+                    nro_telefono=borrador.nro_telefono,
+                    nombres=borrador.nombres,
+                    apellidos=borrador.apellidos,
+                    nro_documento=borrador.nro_documento,
+                    genero=borrador.genero,
+                    ciudad=borrador.ciudad,
+                    estado_civil=borrador.estado_civil,
+                    campus_sede=campus_sede_obj,
+                    facultad=facultad_obj,
+                    carrera=carrera_obj,
+                    ano_ingreso=borrador.ano_ingreso,
+                    ano_egreso=borrador.ano_egreso,
+                    ano_primer_empleo=borrador.ano_primer_empleo,
+                    ano_primer_empleo_carrera=borrador.ano_primer_empleo_carrera,
+                )
+
+                # 🔹 Marcar el registro como exportado
+                borrador.estado = "E"
+                borrador.save()
+
+            except Exception as e:
+                messages.error(request, f"Error procesando ID {id_respuesta}: {str(e)}")
 
         messages.success(request, "Las respuestas seleccionadas se han exportado correctamente. ✅")
         return redirect("ver_borrador")
 
-    respuestas_borrador = Respuesta_borrador.objects.filter(estado__in = ["P","D"])
+    respuestas_borrador = Respuesta_borrador.objects.filter(estado__in=["P", "D"])
     return render(request, "ver_borrador.html", {"respuestas": respuestas_borrador})
