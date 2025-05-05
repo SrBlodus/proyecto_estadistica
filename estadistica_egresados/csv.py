@@ -5,6 +5,11 @@ import csv
 from .models import Respuesta_borrador, Respuesta_oficial, Facultad, Carrera, CampusSede, Genero, EstadoCivil
 from .forms import CSVUploadForm
 from django.contrib import messages
+import hashlib
+
+
+
+
 
 def imp_exp_archivos_inicio(request):
     return render(request, "imp-exp-archivos/inicio_imp_exp_archivos.html")
@@ -18,7 +23,6 @@ def importar_csv(request):
 
             for row in reader:
                 try:
-
                     # Convertir la marca temporal al formato correcto
                     marca_temporal = row.get("Marca temporal", "").strip()
                     #print(f"Fecha convertida: {marca_temporal}")
@@ -32,11 +36,6 @@ def importar_csv(request):
                         fecha_hora_encuesta = None  #  Si hay error, guarda `None`
 
                     #print(f"Fecha convertida: {fecha_hora_encuesta}")
-
-
-                    # Aquí buscamos el siguiente nro. de registro
-                    ultimo_nro_registro = Respuesta_borrador.objects.order_by("-nro_registro").first()
-                    nuevo_nro_registro = (ultimo_nro_registro.nro_registro + 1) if ultimo_nro_registro else 1
 
 
                     # Obtener los nro_documento e IDs correspondientes para buscar duplicados
@@ -61,29 +60,44 @@ def importar_csv(request):
                     else:
                         fecha_hora_encuesta_anterior = None
 
+                    # Generar un hash único del registro
+                    datos_unicos = f"{nro_documento}|{facultad_obj}|{carrera_obj}|{campus_sede_obj}|{fecha_hora_encuesta}"
+                    hash_registro = hashlib.md5(datos_unicos.encode()).hexdigest()
+
+                    # Verificar si el registro ya existe en `Respuesta_borrador`
+                    existe_borrador = Respuesta_borrador.objects.filter(hash_valor=hash_registro).exists()
+
+                    if not existe_borrador:
+                        # Aquí buscamos el siguiente nro. de registro
+                        ultimo_nro_registro = Respuesta_borrador.objects.order_by("-nro_registro").first()
+                        nuevo_nro_registro = (ultimo_nro_registro.nro_registro + 1) if ultimo_nro_registro else 1
+
 
                     # Guardar en el borrador con valores sin convertir
-                    Respuesta_borrador.objects.create(
-                        fecha_hora_encuesta = fecha_hora_encuesta,
-                        fecha_hora_encuesta_anterior = fecha_hora_encuesta_anterior,
-                        nro_registro=nuevo_nro_registro,
-                        correo=row.get("Nombre de usuario", "").strip(),
-                        nro_telefono=row.get("Número de teléfono", "").strip(),
-                        nombres=row.get("Nombres", "").strip(),
-                        apellidos=row.get("Apellidos", "").strip(),
-                        nro_documento=nro_documento,
-                        genero=row.get("Género", "").strip(),
-                        ciudad=row.get("Ciudad actual de residencia", "").strip(),
-                        estado_civil=row.get("Estado Civil", "").strip(),
-                        campus_sede=row.get("Campus o sede de promoción", "").strip(),
-                        facultad=row.get("Facultad", "").strip(),
-                        carrera=row.get("Carrera", "").strip(),
-                        ano_ingreso=row.get("Año de ingreso", ""),
-                        ano_egreso=row.get("Año de egreso", ""),
-                        ano_primer_empleo=row.get("Año en obtener primer empleo o emprendimiento", ""),
-                        ano_primer_empleo_carrera=row.get("Año en obtener primer empleo o emprendimiento relacionado a su carrera", ""),
-                        estado=estado,
-                    )
+                        Respuesta_borrador.objects.create(
+                            fecha_hora_encuesta = fecha_hora_encuesta,
+                            fecha_hora_encuesta_anterior = fecha_hora_encuesta_anterior,
+                            nro_registro=nuevo_nro_registro,
+                            correo=row.get("Nombre de usuario", "").strip(),
+                            nro_telefono=row.get("Número de teléfono", "").strip(),
+                            nombres=row.get("Nombres", "").strip(),
+                            apellidos=row.get("Apellidos", "").strip(),
+                            nro_documento=nro_documento,
+                            genero=row.get("Género", "").strip(),
+                            ciudad=row.get("Ciudad actual de residencia", "").strip(),
+                            estado_civil=row.get("Estado Civil", "").strip(),
+                            campus_sede=row.get("Campus o sede de promoción", "").strip(),
+                            facultad=row.get("Facultad", "").strip(),
+                            carrera=row.get("Carrera", "").strip(),
+                            ano_ingreso=row.get("Año de ingreso", ""),
+                            ano_egreso=row.get("Año de egreso", ""),
+                            ano_primer_empleo=row.get("Año en obtener primer empleo o emprendimiento", ""),
+                            ano_primer_empleo_carrera=row.get("Año en obtener primer empleo o emprendimiento relacionado a su carrera", ""),
+                            hash_valor = hash_registro,
+                            estado=estado,
+                        )
+                    else:
+                        messages.warning(request, f"Registro con hash {hash_registro} ya existe en el borrador. ")
 
                 except Exception as e:
                     return HttpResponse(f"Error procesando el registro Nº {nuevo_nro_registro}: {e}")

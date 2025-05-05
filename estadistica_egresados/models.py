@@ -36,6 +36,7 @@ class Respuesta_borrador(models.Model):
     ano_egreso = models.IntegerField()
     ano_primer_empleo = models.IntegerField()
     ano_primer_empleo_carrera = models.IntegerField()
+    hash_valor = models.CharField(max_length=32, unique=True, null=True, blank=True)
     estado = models.CharField(max_length=1) # P: PENDIENTE, E: EXPORTADO, D: DUPLICADO
 
 class Respuesta_oficial(models.Model):
