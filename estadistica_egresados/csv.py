@@ -1,3 +1,4 @@
+from dateutil import parser
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 import csv
@@ -17,12 +18,29 @@ def importar_csv(request):
 
             for row in reader:
                 try:
+
+                    # Convertir la marca temporal al formato correcto
+                    marca_temporal = row.get("Marca temporal", "").strip()
+                    #print(f"Fecha convertida: {marca_temporal}")
+
+                    # Reemplazar caracteres especiales y limpiar el formato
+                    marca_temporal = marca_temporal.replace("p. m.", "PM").replace("a. m.", "AM").replace("\xa0",                                                                                                          " ").replace("GMT-3", "")
+                    #print(f"Fecha convertida: {marca_temporal}")
+                    try:
+                        fecha_hora_encuesta = parser.parse(marca_temporal)
+                    except ValueError:
+                        fecha_hora_encuesta = None  # 🔹 Si hay error, guarda `None`
+
+                    #print(f"Fecha convertida: {fecha_hora_encuesta}")
+
+
+                    # Aquí buscamos el siguiente nro. de registro
                     ultimo_nro_registro = Respuesta_borrador.objects.order_by("-nro_registro").first()
                     nuevo_nro_registro = (ultimo_nro_registro.nro_registro + 1) if ultimo_nro_registro else 1
 
-                    nro_documento = row.get("Cédula de Identidad Paraguaya Nº", "").strip()
 
-                    # Obtener los IDs correspondientes
+                    # Obtener los nro_documento e IDs correspondientes para buscar duplicados
+                    nro_documento = row.get("Cédula de Identidad Paraguaya Nº", "").strip()
                     facultad_obj = Facultad.objects.filter(descripcion=row.get("Facultad", "").strip()).first()
                     carrera_obj = Carrera.objects.filter(descripcion=row.get("Carrera", "").strip()).first()
                     campus_sede_obj = CampusSede.objects.filter(descripcion=row.get("Campus o sede de promoción", "").strip()).first()
@@ -33,13 +51,21 @@ def importar_csv(request):
                         facultad=facultad_obj,
                         carrera=carrera_obj,
                         campus_sede=campus_sede_obj
-                    ).exists()
+                    ).first()
 
 
                     estado = "D" if existe else "P"
 
+                    if existe:
+                        fecha_hora_encuesta_anterior = existe.fecha_hora_encuesta
+                    else:
+                        fecha_hora_encuesta_anterior = None
+
+
                     # Guardar en el borrador con valores sin convertir
                     Respuesta_borrador.objects.create(
+                        fecha_hora_encuesta = fecha_hora_encuesta,
+                        fecha_hora_encuesta_anterior = fecha_hora_encuesta_anterior,
                         nro_registro=nuevo_nro_registro,
                         correo=row.get("Nombre de usuario", "").strip(),
                         nro_telefono=row.get("Número de teléfono", "").strip(),
@@ -72,6 +98,7 @@ def importar_csv(request):
 def ver_borrador(request):
     if request.method == "POST":
         seleccionadas = request.POST.getlist("seleccionadas")
+        registros_exportados = 0
 
         for id_respuesta in seleccionadas:
             try:
@@ -90,36 +117,68 @@ def ver_borrador(request):
                     continue  # Saltar al siguiente registro
 
                 if not genero_obj or not estado_civil_obj:
-                    messages.error(request, f"Error en registro Nº {borrador.nro_registro}: Genero o Estado Civil no encontrado.")
+                    messages.error(request, f"Error en registro Nº {borrador.nro_registro}: Género o Estado Civil no encontrado.")
                     continue
 
-                # 🔹 Crear el registro en `Respuesta_oficial` con los IDs en lugar de los nombres
-                Respuesta_oficial.objects.create(
-                    correo=borrador.correo,
-                    nro_telefono=borrador.nro_telefono,
-                    nombres=borrador.nombres,
-                    apellidos=borrador.apellidos,
+                registro_existente = Respuesta_oficial.objects.filter(
                     nro_documento=borrador.nro_documento,
-                    genero=genero_obj,
-                    ciudad=borrador.ciudad,
-                    estado_civil=estado_civil_obj,
-                    campus_sede=campus_sede_obj,
                     facultad=facultad_obj,
                     carrera=carrera_obj,
-                    ano_ingreso=borrador.ano_ingreso,
-                    ano_egreso=borrador.ano_egreso,
-                    ano_primer_empleo=borrador.ano_primer_empleo,
-                    ano_primer_empleo_carrera=borrador.ano_primer_empleo_carrera,
-                )
+                    campus_sede=campus_sede_obj
+                ).first()
 
-                # 🔹 Marcar el registro como exportado
+
+                #  Crear el registro en `Respuesta_oficial` con los IDs en lugar de los nombres
+                if registro_existente:
+                    #  Actualizar registro existente en lugar de crear uno nuevo
+                    registro_existente.fecha_hora_encuesta = borrador.fecha_hora_encuesta
+                    registro_existente.correo = borrador.correo
+                    registro_existente.nro_telefono = borrador.nro_telefono
+                    registro_existente.nombres = borrador.nombres
+                    registro_existente.apellidos = borrador.apellidos
+                    registro_existente.genero = genero_obj
+                    registro_existente.ciudad = borrador.ciudad
+                    registro_existente.estado_civil = estado_civil_obj
+                    registro_existente.ano_ingreso = borrador.ano_ingreso
+                    registro_existente.ano_egreso = borrador.ano_egreso
+                    registro_existente.ano_primer_empleo = borrador.ano_primer_empleo
+                    registro_existente.ano_primer_empleo_carrera = borrador.ano_primer_empleo_carrera
+                    registro_existente.save()  # Guardar cambios en `Respuesta_oficial`
+                else:
+                    #  Crear nuevo registro si no existe en `Respuesta_oficial`
+                    Respuesta_oficial.objects.create(
+                        fecha_hora_encuesta=borrador.fecha_hora_encuesta,
+                        correo=borrador.correo,
+                        nro_telefono=borrador.nro_telefono,
+                        nombres=borrador.nombres,
+                        apellidos=borrador.apellidos,
+                        nro_documento=borrador.nro_documento,
+                        genero=genero_obj,
+                        ciudad=borrador.ciudad,
+                        estado_civil=estado_civil_obj,
+                        campus_sede=campus_sede_obj,
+                        facultad=facultad_obj,
+                        carrera=carrera_obj,
+                        ano_ingreso=borrador.ano_ingreso,
+                        ano_egreso=borrador.ano_egreso,
+                        ano_primer_empleo=borrador.ano_primer_empleo,
+                        ano_primer_empleo_carrera=borrador.ano_primer_empleo_carrera,
+                    )
+                # Marcar el registro como exportado
                 borrador.estado = "E"
                 borrador.save()
+                registros_exportados += 1
+
+
 
             except Exception as e:
                 messages.error(request, f"Error procesando registro Nº {borrador.nro_registro}: {str(e)}")
 
-        messages.success(request, "Las respuestas seleccionadas se han exportado correctamente. ✅")
+        if registros_exportados > 0:
+            messages.success(request, f"Se han exportado correctamente {registros_exportados} respuestas.")
+        else:
+            messages.warning(request, "No se exportaron respuestas. Verifica los errores.")
+
         return redirect("ver_borrador")
 
     respuestas_borrador = Respuesta_borrador.objects.filter(estado__in=["P", "D"])

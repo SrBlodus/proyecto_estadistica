@@ -18,6 +18,8 @@ class EstadoCivil(models.Model):
 
 
 class Respuesta_borrador(models.Model):
+    fecha_hora_encuesta = models.DateTimeField(null=True, blank=True)
+    fecha_hora_encuesta_anterior = models.DateTimeField(null=True, blank=True)
     nro_registro = models.IntegerField(unique=True, blank=True, null=True)
     nro_documento = models.CharField(max_length=20)
     correo = models.CharField(max_length=255)
@@ -37,6 +39,7 @@ class Respuesta_borrador(models.Model):
     estado = models.CharField(max_length=1) # P: PENDIENTE, E: EXPORTADO, D: DUPLICADO
 
 class Respuesta_oficial(models.Model):
+    fecha_hora_encuesta = models.DateTimeField(null=True, blank=True)
     correo = models.EmailField()
     nro_telefono = models.CharField(max_length=50)
     nombres = models.CharField(max_length=100)

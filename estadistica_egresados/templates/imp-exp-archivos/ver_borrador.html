@@ -19,6 +19,8 @@
             <th>Seleccionar</th>
             <th>Nº</th>
             <th>Estado</th>
+            <th>Fecha Encuesta</th>
+            <th>Últ. Fecha Encuesta</th>
             <th>Nombres</th>
             <th>Nº C.I.</th>
             <th>Correo</th>
@@ -40,6 +42,8 @@
             {% else %}
                 <td>Exportado</td>
             {% endif %}
+            <th>{{ respuesta.fecha_hora_encuesta }}</th>
+            <th>{{ respuesta.fecha_hora_encuesta_anterior }}</th>
             <td>{{ respuesta.apellidos }},{{ respuesta.nombres }} </td>
             <td>{{ respuesta.nro_documento }} </td>
             <td>{{ respuesta.correo }}</td>
@@ -49,7 +53,6 @@
             <td>{{ respuesta.campus_sede }} </td>
             <td>{{ respuesta.facultad }} </td>
             <td>{{ respuesta.carrera }} </td>
-
 
         </tr>
         {% endfor %}
