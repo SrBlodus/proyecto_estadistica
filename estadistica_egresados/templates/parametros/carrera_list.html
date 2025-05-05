@@ -8,12 +8,13 @@
     </tr>
     {% for carrera in carreras %}
     <tr>
-        <td>{{ carrera.id_carrera }}</td>
+        <td>{{ carrera.id }}</td>
         <td>{{ carrera.descripcion }}</td>
         <td>
-            <a href="{% url 'carrera_update' carrera.id_carrera %}">Editar</a>
-            <a href="{% url 'carrera_delete' carrera.id_carrera %}">Eliminar</a>
+            <a href="{% url 'carrera_update' carrera.id %}">Editar</a>
+            <a href="{% url 'carrera_delete' carrera.id %}">Eliminar</a>
         </td>
     </tr>
     {% endfor %}
 </table>
+<a href="{% url 'parametros_inicio' %}">Volver</a>

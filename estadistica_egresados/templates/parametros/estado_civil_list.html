@@ -1,0 +1,20 @@
+<h2>Listado de Estado Civil</h2>
+<a href="{% url 'estado_civil_create' %}">Agregar nuevo estado civil</a>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Descripción</th>
+        <th>Acciones</th>
+    </tr>
+    {% for estado in estados_civiles %}
+    <tr>
+        <td>{{ estado.id }}</td>
+        <td>{{ estado.descripcion }}</td>
+        <td>
+            <a href="{% url 'estado_civil_update' estado.id %}"> Editar</a> |
+            <a href="{% url 'estado_civil_delete' estado.id %}"> Eliminar</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{% url 'parametros_inicio' %}">Volver</a>

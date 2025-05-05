@@ -1,9 +1,12 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 import csv
-from .models import Respuesta_borrador, Respuesta_oficial, Facultad, Carrera, CampusSede
+from .models import Respuesta_borrador, Respuesta_oficial, Facultad, Carrera, CampusSede, Genero, EstadoCivil
 from .forms import CSVUploadForm
 from django.contrib import messages
+
+def imp_exp_archivos_inicio(request):
+    return render(request, "imp-exp-archivos/inicio_imp_exp_archivos.html")
 
 def importar_csv(request):
     if request.method == "POST":
@@ -14,6 +17,9 @@ def importar_csv(request):
 
             for row in reader:
                 try:
+                    ultimo_nro_registro = Respuesta_borrador.objects.order_by("-nro_registro").first()
+                    nuevo_nro_registro = (ultimo_nro_registro.nro_registro + 1) if ultimo_nro_registro else 1
+
                     nro_documento = row.get("Cédula de Identidad Paraguaya Nº", "").strip()
 
                     # Obtener los IDs correspondientes
@@ -34,6 +40,7 @@ def importar_csv(request):
 
                     # Guardar en el borrador con valores sin convertir
                     Respuesta_borrador.objects.create(
+                        nro_registro=nuevo_nro_registro,
                         correo=row.get("Nombre de usuario", "").strip(),
                         nro_telefono=row.get("Número de teléfono", "").strip(),
                         nombres=row.get("Nombres", "").strip(),
@@ -53,14 +60,14 @@ def importar_csv(request):
                     )
 
                 except Exception as e:
-                    return HttpResponse(f"Error procesando la fila {row}: {e}")
+                    return HttpResponse(f"Error procesando el registro Nº {nuevo_nro_registro}: {e}")
 
             return redirect("ver_borrador")
 
     else:
         form = CSVUploadForm()
 
-    return render(request, "importar_csv.html", {"form": form})
+    return render(request, "imp-exp-archivos/importar_csv.html", {"form": form})
 
 def ver_borrador(request):
     if request.method == "POST":
@@ -70,15 +77,21 @@ def ver_borrador(request):
             try:
                 borrador = Respuesta_borrador.objects.get(id=id_respuesta)
 
-                # 🔹 Convertir facultad, carrera y campus_sede a sus respectivos IDs
+                # 🔹 Convertir facultad, carrera, sexo y campus_sede a sus respectivos IDs
                 facultad_obj = Facultad.objects.filter(descripcion=borrador.facultad).first()
                 carrera_obj = Carrera.objects.filter(descripcion=borrador.carrera).first()
                 campus_sede_obj = CampusSede.objects.filter(descripcion=borrador.campus_sede).first()
+                genero_obj = Genero.objects.filter(descripcion=borrador.genero).first()
+                estado_civil_obj = EstadoCivil.objects.filter(descripcion=borrador.estado_civil).first()
 
-                # 🔹 Validación para evitar errores si no encuentra los IDs
+                # 🔹 Validaciónes para evitar errores si no encuentra los IDs
                 if not facultad_obj or not carrera_obj or not campus_sede_obj:
-                    messages.error(request, f"Error en ID {id_respuesta}: Facultad, Carrera o Campus no encontrados.")
+                    messages.error(request, f"Error en registro Nº {borrador.nro_registro}: Facultad, Carrera o Campus no encontrados.")
                     continue  # Saltar al siguiente registro
+
+                if not genero_obj or not estado_civil_obj:
+                    messages.error(request, f"Error en registro Nº {borrador.nro_registro}: Genero o Estado Civil no encontrado.")
+                    continue
 
                 # 🔹 Crear el registro en `Respuesta_oficial` con los IDs en lugar de los nombres
                 Respuesta_oficial.objects.create(
@@ -87,9 +100,9 @@ def ver_borrador(request):
                     nombres=borrador.nombres,
                     apellidos=borrador.apellidos,
                     nro_documento=borrador.nro_documento,
-                    genero=borrador.genero,
+                    genero=genero_obj,
                     ciudad=borrador.ciudad,
-                    estado_civil=borrador.estado_civil,
+                    estado_civil=estado_civil_obj,
                     campus_sede=campus_sede_obj,
                     facultad=facultad_obj,
                     carrera=carrera_obj,
@@ -104,10 +117,10 @@ def ver_borrador(request):
                 borrador.save()
 
             except Exception as e:
-                messages.error(request, f"Error procesando ID {id_respuesta}: {str(e)}")
+                messages.error(request, f"Error procesando registro Nº {borrador.nro_registro}: {str(e)}")
 
         messages.success(request, "Las respuestas seleccionadas se han exportado correctamente. ✅")
         return redirect("ver_borrador")
 
     respuestas_borrador = Respuesta_borrador.objects.filter(estado__in=["P", "D"])
-    return render(request, "ver_borrador.html", {"respuestas": respuestas_borrador})
+    return render(request, "imp-exp-archivos/ver_borrador.html", {"respuestas": respuestas_borrador})

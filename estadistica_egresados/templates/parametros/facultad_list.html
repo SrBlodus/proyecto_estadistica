@@ -8,12 +8,13 @@
     </tr>
     {% for facultad in facultades %}
     <tr>
-        <td>{{ facultad.id_facultad }}</td>
+        <td>{{ facultad.id }}</td>
         <td>{{ facultad.descripcion }}</td>
         <td>
-            <a href="{% url 'facultad_update' facultad.id_facultad %}">Editar</a> |
-            <a href="{% url 'facultad_delete' facultad.id_facultad %}">Eliminar</a>
+            <a href="{% url 'facultad_update' facultad.id %}">Editar</a> |
+            <a href="{% url 'facultad_delete' facultad.id %}">Eliminar</a>
         </td>
     </tr>
     {% endfor %}
 </table>
+<a href="{% url 'parametros_inicio' %}">Volver</a>

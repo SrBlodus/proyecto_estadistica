@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Importación de Archivos</title>
+</head>
+<body>
+<h2>Gestión de Archivos</h2>
+<p>Selecciona la opción que desee realizar:</p>
+
+<div style="display: flex; gap: 20px;">
+    <a href="{% url 'importar_csv' %}">
+        <button> Cargar Nuevo Archivo CSV</button>
+    </a>
+    <a href="{% url 'ver_borrador' %}">
+        <button> Ver Registros Preliminares</button>
+    </a>
+</div>
+</body>
+<a href="{% url 'inicio' %}">Volver</a>
+</html>

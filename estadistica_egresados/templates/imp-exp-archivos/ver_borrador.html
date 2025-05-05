@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tabla Preliminar</title>
+</head>
+<body>
+<h2>Respuestas en Borrador</h2>
+<form method="POST">
+    {% csrf_token %}
+    {% if messages %}
+    {% for message in messages %}
+        <p style="color: green;">{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+
+    <table border="1">
+        <tr>
+            <th>Seleccionar</th>
+            <th>Nº</th>
+            <th>Estado</th>
+            <th>Nombres</th>
+            <th>Nº C.I.</th>
+            <th>Correo</th>
+            <th>Nº Teléfono</th>
+            <th>Género</th>
+            <th>Estado Civil</th>
+            <th>Campus/Sede</th>
+            <th>Facultad</th>
+            <th>Carrera</th>
+        </tr>
+        {% for respuesta in respuestas %}
+        <tr>
+            <td><input type="checkbox" name="seleccionadas" value="{{ respuesta.id }}"></td>
+            <td>{{ respuesta.nro_registro }}</td>
+            {% if respuesta.estado == 'P' %}
+                <td>Pendiente</td>
+            {% elif respuesta.estado == 'D' %}
+                <td>Duplicado</td>
+            {% else %}
+                <td>Exportado</td>
+            {% endif %}
+            <td>{{ respuesta.apellidos }},{{ respuesta.nombres }} </td>
+            <td>{{ respuesta.nro_documento }} </td>
+            <td>{{ respuesta.correo }}</td>
+            <td>{{ respuesta.nro_telefono }} </td>
+            <td>{{ respuesta.genero }} </td>
+            <td>{{ respuesta.estado_civil }} </td>
+            <td>{{ respuesta.campus_sede }} </td>
+            <td>{{ respuesta.facultad }} </td>
+            <td>{{ respuesta.carrera }} </td>
+
+
+        </tr>
+        {% endfor %}
+    </table>
+    <button type="submit">Exportar seleccionadas</button>
+</form>
+</body>
+<a href="{% url 'inicio_imp_exp_archivos' %}">Volver</a>
+</html>

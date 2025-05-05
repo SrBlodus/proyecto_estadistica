@@ -1,0 +1,4 @@
+NOTA 01: 'Se ha normalizado la mayoria de los campos, se ha separado los templates en carpetas diferentes segun el modulo y se han modificado algunas vistas para que sea mas intuitivo. 
+Por hacer: agregar un filtro para los registros preliminares para ver por estado: TODOS, DUPLICADOS, PENDIENTES, EXPORTADOS; También se puede agregar un texto que diga 
+"Para actualizar la encuesta  de un egresado ya exportado, solo seleccione la nueva respuesta(Estará con estado "Duplicado")" , también se pueden agregar botones para 
+eliminar los registros seleccionados,y un botón que deje eliminar de las respuestas oficiales a un registro exportado que se encuentre el borrador con estado Exportado' 

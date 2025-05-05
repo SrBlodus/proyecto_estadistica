@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Facultad, Carrera, CampusSede
+from .models import Facultad, Carrera, CampusSede, Genero, EstadoCivil
 
 # Son vistas que ya proporciona Django mismo para los ABMs
 
@@ -18,14 +18,14 @@ class FacultadListView(ListView):
 class FacultadCreateView(CreateView):
     model = Facultad
     template_name = "parametros/facultad_form.html"
-    fields = ["id_facultad", "descripcion"]
+    fields = ["id", "descripcion"]
     success_url = reverse_lazy("facultad_list")
 
 # 🔹 Vista para modificar una Facultad
 class FacultadUpdateView(UpdateView):
     model = Facultad
     template_name = "parametros/facultad_form.html"
-    fields = ["id_facultad", "descripcion"]
+    fields = ["id", "descripcion"]
     success_url = reverse_lazy("facultad_list")
 
 # 🔹 Vista para eliminar una Facultad
@@ -42,13 +42,13 @@ class CarreraListView(ListView):
 class CarreraCreateView(CreateView):
     model = Carrera
     template_name = "parametros/carrera_form.html"
-    fields = ["id_carrera", "descripcion"]
+    fields = ["id", "descripcion"]
     success_url = reverse_lazy("carrera_list")
 
 class CarreraUpdateView(UpdateView):
     model = Carrera
     template_name = "parametros/carrera_form.html"
-    fields = ["id_carrera", "descripcion"]
+    fields = ["id", "descripcion"]
     success_url = reverse_lazy("carrera_list")
 
 class CarreraDeleteView(DeleteView):
@@ -65,16 +65,61 @@ class CampusSedeListView(ListView):
 class CampusSedeCreateView(CreateView):
     model = CampusSede
     template_name = "parametros/campus_sede_form.html"
-    fields = ["id_campus_sede", "descripcion"]
+    fields = ["id", "descripcion"]
     success_url = reverse_lazy("campus_sede_list")
 
 class CampusSedeUpdateView(UpdateView):
     model = CampusSede
     template_name = "parametros/campus_sede_form.html"
-    fields = ["id_campus_sede", "descripcion"]
+    fields = ["id", "descripcion"]
     success_url = reverse_lazy("campus_sede_list")
 
 class CampusSedeDeleteView(DeleteView):
     model = CampusSede
     template_name = "parametros/campus_sede_confirm_delete.html"
     success_url = reverse_lazy("campus_sede_list")
+
+class GeneroListView(ListView):
+    model = Genero
+    template_name = "parametros/genero_list.html"
+    context_object_name = "generos"
+
+class GeneroCreateView(CreateView):
+    model = Genero
+    template_name = "parametros/genero_form.html"
+    fields = ["id", "descripcion"]
+    success_url = reverse_lazy("genero_list")
+
+class GeneroUpdateView(UpdateView):
+    model = Genero
+    template_name = "parametros/genero_form.html"
+    fields = ["id", "descripcion"]
+    success_url = reverse_lazy("genero_list")
+
+class GeneroDeleteView(DeleteView):
+    model = Genero
+    template_name = "parametros/genero_confirm_delete.html"
+    success_url = reverse_lazy("genero_list")
+
+
+class EstadoCivilListView(ListView):
+    model = EstadoCivil
+    template_name = "parametros/estado_civil_list.html"
+    context_object_name = "estados_civiles"
+
+class EstadoCivilCreateView(CreateView):
+    model = EstadoCivil
+    template_name = "parametros/estado_civil_form.html"
+    fields = ["id", "descripcion"]
+    success_url = reverse_lazy("estado_civil_list")
+
+class EstadoCivilUpdateView(UpdateView):
+    model = EstadoCivil
+    template_name = "parametros/estado_civil_form.html"
+    fields = ["id", "descripcion"]
+    success_url = reverse_lazy("estado_civil_list")
+
+class EstadoCivilDeleteView(DeleteView):
+    model = EstadoCivil
+    template_name = "parametros/estado_civil_confirm_delete.html"
+    success_url = reverse_lazy("estado_civil_list")

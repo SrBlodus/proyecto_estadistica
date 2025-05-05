@@ -1,0 +1,7 @@
+<h2>{% if object %}Editar Sexo{% else %}Nuevo Genero{% endif %}</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar</button>
+</form>
+<a href="{% url 'genero_list' %}">Volver</a>

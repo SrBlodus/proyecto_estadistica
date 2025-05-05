@@ -1,0 +1,20 @@
+<h2>Listado de Géneros</h2>
+<a href="{% url 'genero_create' %}">Agregar nuevo Género</a>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Descripción</th>
+        <th>Acciones</th>
+    </tr>
+    {% for genero in generos %}
+    <tr>
+        <td>{{ genero.id }}</td>
+        <td>{{ genero.descripcion }}</td>
+        <td>
+            <a href="{% url 'genero_update' genero.id %}">Editar</a>
+            <a href="{% url 'genero_delete' genero.id %}">Eliminar</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{% url 'parametros_inicio' %}">Volver</a>
