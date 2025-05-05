@@ -29,7 +29,7 @@ def importar_csv(request):
                     try:
                         fecha_hora_encuesta = parser.parse(marca_temporal)
                     except ValueError:
-                        fecha_hora_encuesta = None  # 🔹 Si hay error, guarda `None`
+                        fecha_hora_encuesta = None  #  Si hay error, guarda `None`
 
                     #print(f"Fecha convertida: {fecha_hora_encuesta}")
 
@@ -99,7 +99,7 @@ def ver_borrador(request):
     if request.method == "POST":
         seleccionadas = request.POST.getlist("seleccionadas")
 
-        accion = request.POST.get("accion")  # 🔹 Detectar si se quiere exportar o eliminar
+        accion = request.POST.get("accion")  #  Detectar si se quiere exportar o eliminar
 
         if accion == "eliminar":
             # Eliminar los registros seleccionados
@@ -113,14 +113,14 @@ def ver_borrador(request):
             try:
                 borrador = Respuesta_borrador.objects.get(id=id_respuesta)
 
-                # 🔹 Convertir facultad, carrera, sexo y campus_sede a sus respectivos IDs
+                #  Convertir facultad, carrera, sexo y campus_sede a sus respectivos IDs
                 facultad_obj = Facultad.objects.filter(descripcion=borrador.facultad).first()
                 carrera_obj = Carrera.objects.filter(descripcion=borrador.carrera).first()
                 campus_sede_obj = CampusSede.objects.filter(descripcion=borrador.campus_sede).first()
                 genero_obj = Genero.objects.filter(descripcion=borrador.genero).first()
                 estado_civil_obj = EstadoCivil.objects.filter(descripcion=borrador.estado_civil).first()
 
-                # 🔹 Validaciónes para evitar errores si no encuentra los IDs
+                #  Validaciónes para evitar errores si no encuentra los IDs
                 if not facultad_obj or not carrera_obj or not campus_sede_obj:
                     messages.error(request, f"Error en registro Nº {borrador.nro_registro}: Facultad, Carrera o Campus no encontrados.")
                     continue  # Saltar al siguiente registro
