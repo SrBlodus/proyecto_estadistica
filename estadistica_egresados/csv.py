@@ -24,7 +24,7 @@ def importar_csv(request):
                     #print(f"Fecha convertida: {marca_temporal}")
 
                     # Reemplazar caracteres especiales y limpiar el formato
-                    marca_temporal = marca_temporal.replace("p. m.", "PM").replace("a. m.", "AM").replace("\xa0",                                                                                                          " ").replace("GMT-3", "")
+                    marca_temporal = marca_temporal.replace("p. m.", "PM").replace("a. m.", "AM").replace("\xa0"," ").replace("GMT-3", "")
                     #print(f"Fecha convertida: {marca_temporal}")
                     try:
                         fecha_hora_encuesta = parser.parse(marca_temporal)
@@ -178,8 +178,15 @@ def ver_borrador(request):
             messages.success(request, f"Se han exportado correctamente {registros_exportados} respuestas.")
         else:
             messages.warning(request, "No se exportaron respuestas. Verifica los errores.")
-
         return redirect("ver_borrador")
 
-    respuestas_borrador = Respuesta_borrador.objects.filter(estado__in=["P", "D"])
-    return render(request, "imp-exp-archivos/ver_borrador.html", {"respuestas": respuestas_borrador})
+    estado_filtro = request.GET.get("estado", "P")  # Obtener el estado desde la URL (por defecto "Pendientes")
+
+    # Aplicar el filtro según el estado seleccionado
+    if estado_filtro == "P":
+        respuestas_borrador = Respuesta_borrador.objects.filter(estado="P")
+    elif estado_filtro == "D":
+        respuestas_borrador = Respuesta_borrador.objects.filter(estado="D")
+
+    return render(request, "imp-exp-archivos/ver_borrador.html",
+                  {"respuestas": respuestas_borrador, "estado_filtro": estado_filtro})
