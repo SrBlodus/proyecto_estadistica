@@ -98,6 +98,15 @@ def importar_csv(request):
 def ver_borrador(request):
     if request.method == "POST":
         seleccionadas = request.POST.getlist("seleccionadas")
+
+        accion = request.POST.get("accion")  # 🔹 Detectar si se quiere exportar o eliminar
+
+        if accion == "eliminar":
+            # Eliminar los registros seleccionados
+            registros_eliminados = Respuesta_borrador.objects.filter(id__in=seleccionadas).delete()
+            messages.success(request, f"{registros_eliminados[0]} registros eliminados correctamente.")
+            return redirect("ver_borrador")
+
         registros_exportados = 0
 
         for id_respuesta in seleccionadas:
@@ -180,13 +189,15 @@ def ver_borrador(request):
             messages.warning(request, "No se exportaron respuestas. Verifica los errores.")
         return redirect("ver_borrador")
 
-    estado_filtro = request.GET.get("estado", "P")  # Obtener el estado desde la URL (por defecto "Pendientes")
+    estado_filtro = request.GET.get("estado", "T")  # Obtener el estado desde la URL (por defecto "T"(PENDIENTES Y DUPLICADOS))
 
     # Aplicar el filtro según el estado seleccionado
     if estado_filtro == "P":
         respuestas_borrador = Respuesta_borrador.objects.filter(estado="P")
     elif estado_filtro == "D":
         respuestas_borrador = Respuesta_borrador.objects.filter(estado="D")
+    else:
+        respuestas_borrador = Respuesta_borrador.objects.filter(estado__in= ['P','D'])
 
     return render(request, "imp-exp-archivos/ver_borrador.html",
                   {"respuestas": respuestas_borrador, "estado_filtro": estado_filtro})
