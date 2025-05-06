@@ -2,26 +2,20 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Tabla Preliminar</title>
+    <title>Tabla de Exportados</title>
 </head>
 <body>
-<h2>Respuestas en Borrador</h2>
-<p>Si quiere cargar la nueva encuesta de un alumno cuya encuesta anterior ya ha sido exportada, sólo seleccionelo y exportelo (Estará con Estado Duplicado) </p>
-
+<<h2>Respuestas Exportadas</h2>
 <form method="GET">
-    <label for="estado">Filtrar por estado:</label>
-    <select name="estado" id="estado" onchange="this.form.submit()">
-        <option value="P" {% if estado_filtro == "P" %}selected{% endif %}>Pendientes</option>
-        <option value="D" {% if estado_filtro == "D" %}selected{% endif %}>Duplicados</option>
-        <option value="T" {% if estado_filtro == "T" %}selected{% endif %}>Todos</option>
-    </select>
+    <input type="text" name="q" placeholder="Buscar..." value="{{ query }}">
+    <button type="submit">Buscar</button>
 </form>
 
 <form method="POST">
     {% csrf_token %}
     {% if messages %}
     {% for message in messages %}
-        <p style="color: green;">{{ message }}</p>
+    <p style="color: green;">{{ message }}</p>
     {% endfor %}
     {% endif %}
 
@@ -41,7 +35,9 @@
             <th>Campus/Sede</th>
             <th>Facultad</th>
             <th>Carrera</th>
+            <th>Hash</th>
         </tr>
+
         {% for respuesta in respuestas %}
         <tr>
             <td><input type="checkbox" class="checkRegistro" name="seleccionadas" value="{{ respuesta.id }}"></td>
@@ -53,25 +49,24 @@
             {% else %}
                 <td>Exportado</td>
             {% endif %}
-            <th>{{ respuesta.fecha_hora_encuesta }}</th>
-            <th>{{ respuesta.fecha_hora_encuesta_anterior }}</th>
-            <td>{{ respuesta.apellidos }},{{ respuesta.nombres }} </td>
-            <td>{{ respuesta.nro_documento }} </td>
+            <td>{{ respuesta.fecha_hora_encuesta }}</td>
+            <td>{{ respuesta.fecha_hora_encuesta_anterior }}</td>
+            <td>{{ respuesta.apellidos }}, {{ respuesta.nombres }}</td>
+            <td>{{ respuesta.nro_documento }}</td>
             <td>{{ respuesta.correo }}</td>
-            <td>{{ respuesta.nro_telefono }} </td>
-            <td>{{ respuesta.genero }} </td>
-            <td>{{ respuesta.estado_civil }} </td>
-            <td>{{ respuesta.campus_sede }} </td>
-            <td>{{ respuesta.facultad }} </td>
-            <td>{{ respuesta.carrera }} </td>
-
+            <td>{{ respuesta.nro_telefono }}</td>
+            <td>{{ respuesta.genero }}</td>
+            <td>{{ respuesta.estado_civil }}</td>
+            <td>{{ respuesta.campus_sede }}</td>
+            <td>{{ respuesta.facultad }}</td>
+            <td>{{ respuesta.carrera }}</td>
+            <td>{{ respuesta.hash_valor }}</td>
         </tr>
         {% endfor %}
     </table>
-        <button type="submit" name="accion" value="exportar">Exportar seleccionadas</button>
     <button type="submit" name="accion" value="eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar estos registros?');">Eliminar seleccionadas</button>
-
 </form>
+
 <script>
     function seleccionarTodos() {
         document.querySelectorAll(".checkRegistro").forEach(checkbox => checkbox.checked = true);
@@ -83,7 +78,6 @@
         checkboxes.forEach(checkbox => checkbox.checked = estado);
     }
 </script>
-
 
 </body>
 <a href="{% url 'inicio_imp_exp_archivos' %}">Volver</a>

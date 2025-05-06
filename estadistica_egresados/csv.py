@@ -215,3 +215,35 @@ def ver_borrador(request):
 
     return render(request, "imp-exp-archivos/ver_borrador.html",
                   {"respuestas": respuestas_borrador, "estado_filtro": estado_filtro})
+
+def ver_exportados(request):
+    if request.method == "POST":
+        seleccionadas = request.POST.getlist("seleccionadas")
+
+        accion = request.POST.get("accion")  #  Detectar si se quiere eliminar
+
+        if accion == "eliminar":
+            # Eliminar los registros seleccionados
+            registros_eliminados = Respuesta_borrador.objects.filter(id__in=seleccionadas).delete()
+            messages.success(request, f"{registros_eliminados[0]} registros eliminados correctamente.")
+            return redirect("ver_exportados")
+
+    query = request.GET.get("q", "")  # Capturar el texto de búsqueda desde el formulario
+
+    # Filtrar por búsqueda si hay un término ingresado
+    respuestas_borrador = Respuesta_borrador.objects.filter(estado="E")
+    if query:
+        respuestas_borrador = respuestas_borrador.filter(
+            nombres__icontains=query
+        ) | respuestas_borrador.filter(
+            apellidos__icontains=query
+        ) | respuestas_borrador.filter(
+            nro_documento__icontains=query
+        ) | respuestas_borrador.filter(
+            hash_valor__icontains=query
+        )
+
+    return render(request, "imp-exp-archivos/ver_exportados.html",
+                  {"respuestas": respuestas_borrador,
+                           "query": query,
+                   })

@@ -7,7 +7,7 @@ from .parametros import (FacultadListView, FacultadCreateView, FacultadUpdateVie
                          EstadoCivilUpdateView, EstadoCivilDeleteView
                          )
 from .views import inicio
-from .csv import importar_csv,ver_borrador, imp_exp_archivos_inicio
+from .csv import importar_csv, ver_borrador, imp_exp_archivos_inicio, ver_exportados
 
 urlpatterns = [
     path("",inicio, name="inicio"),
@@ -15,6 +15,7 @@ urlpatterns = [
     # URLs para la parte de la importación y exportación de los archivos
     path("importar_archivo", importar_csv, name="importar_csv"),
     path("ver_borrador",ver_borrador,name="ver_borrador"),
+    path("ver_exportados",ver_exportados,name="ver_exportados"),
     path("imp-exp-archivos",imp_exp_archivos_inicio,name="inicio_imp_exp_archivos"),
 
     # URLs para el inicio de parámetros
