@@ -72,8 +72,16 @@ def importar_csv(request):
                         ultimo_nro_registro = Respuesta_borrador.objects.order_by("-nro_registro").first()
                         nuevo_nro_registro = (ultimo_nro_registro.nro_registro + 1) if ultimo_nro_registro else 1
 
+                        # Convertir valores vacíos a None antes de insertar
+                        def convertir_a_entero(valor):
+                            return int(valor) if valor.strip() and valor.isdigit() else None
 
-                    # Guardar en el borrador con valores sin convertir
+                        ano_primer_empleo = convertir_a_entero(
+                            row.get("Año en obtener primer empleo o emprendimiento", ""))
+                        ano_primer_empleo_carrera = convertir_a_entero(
+                            row.get("Año en obtener primer empleo o emprendimiento relacionado a su carrera", ""))
+
+                        # Guardar en el borrador con valores sin convertir
                         Respuesta_borrador.objects.create(
                             fecha_hora_encuesta = fecha_hora_encuesta,
                             fecha_hora_encuesta_anterior = fecha_hora_encuesta_anterior,
@@ -91,8 +99,8 @@ def importar_csv(request):
                             carrera=row.get("Carrera", "").strip(),
                             ano_ingreso=row.get("Año de ingreso", ""),
                             ano_egreso=row.get("Año de egreso", ""),
-                            ano_primer_empleo=row.get("Año en obtener primer empleo o emprendimiento", ""),
-                            ano_primer_empleo_carrera=row.get("Año en obtener primer empleo o emprendimiento relacionado a su carrera", ""),
+                            ano_primer_empleo=ano_primer_empleo,
+                            ano_primer_empleo_carrera=ano_primer_empleo_carrera,
                             hash_valor = hash_registro,
                             estado=estado,
                         )
@@ -135,13 +143,26 @@ def ver_borrador(request):
                 estado_civil_obj = EstadoCivil.objects.filter(descripcion=borrador.estado_civil).first()
 
                 #  Validaciónes para evitar errores si no encuentra los IDs
-                if not facultad_obj or not carrera_obj or not campus_sede_obj:
-                    messages.error(request, f"Error en registro Nº {borrador.nro_registro}: Facultad, Carrera o Campus no encontrados.")
-                    continue  # Saltar al siguiente registro
-
-                if not genero_obj or not estado_civil_obj:
-                    messages.error(request, f"Error en registro Nº {borrador.nro_registro}: Género o Estado Civil no encontrado.")
+                if not facultad_obj:
+                    messages.error(request, f"Error en registro Nº {borrador.nro_registro}: Facultad no encontrada.")
                     continue
+
+                if not carrera_obj:
+                    messages.error(request, f"Error en registro Nº {borrador.nro_registro}: Carrera no encontrada.")
+                    continue
+
+                if not campus_sede_obj:
+                    messages.error(request, f"Error en registro Nº {borrador.nro_registro}: Campus/Sede no encontrado.")
+                    continue
+
+                if not genero_obj:
+                    messages.error(request, f"Error en registro Nº {borrador.nro_registro}: Género no encontrado.")
+                    continue
+
+                if not estado_civil_obj:
+                    messages.error(request, f"Error en registro Nº {borrador.nro_registro}: Estado Civil no encontrado.")
+                    continue
+
 
                 registro_existente = Respuesta_oficial.objects.filter(
                     nro_documento=borrador.nro_documento,

@@ -34,8 +34,8 @@ class Respuesta_borrador(models.Model):
     campus_sede = models.CharField(max_length=255)
     ano_ingreso = models.IntegerField()
     ano_egreso = models.IntegerField()
-    ano_primer_empleo = models.IntegerField()
-    ano_primer_empleo_carrera = models.IntegerField()
+    ano_primer_empleo = models.IntegerField(null=True, blank=True)
+    ano_primer_empleo_carrera = models.IntegerField(null=True, blank=True)
     hash_valor = models.CharField(max_length=32, unique=True, null=True, blank=True)
     estado = models.CharField(max_length=1) # P: PENDIENTE, E: EXPORTADO, D: DUPLICADO
 
@@ -57,5 +57,5 @@ class Respuesta_oficial(models.Model):
 
     ano_ingreso = models.IntegerField()
     ano_egreso = models.IntegerField()
-    ano_primer_empleo = models.IntegerField()
-    ano_primer_empleo_carrera = models.IntegerField()
+    ano_primer_empleo = models.IntegerField(null=True, blank=True)
+    ano_primer_empleo_carrera = models.IntegerField(null=True, blank=True)
