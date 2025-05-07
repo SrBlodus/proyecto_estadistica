@@ -2,7 +2,7 @@ from dateutil import parser
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 import csv
-from .models import Respuesta_borrador, Respuesta_oficial, Facultad, Carrera, CampusSede, Genero, EstadoCivil
+from .models import Respuesta_borrador, Respuesta_oficial, Facultad, Carrera, CampusSede, Genero, EstadoCivil, Pais
 from .forms import CSVUploadForm
 from django.contrib import messages
 import hashlib
@@ -61,7 +61,7 @@ def importar_csv(request):
                         fecha_hora_encuesta_anterior = None
 
                     # Generar un hash único del registro
-                    datos_unicos = f"{nro_documento}|{facultad_obj}|{carrera_obj}|{campus_sede_obj}|{fecha_hora_encuesta}"
+                    datos_unicos = f"{nro_documento}|{fecha_hora_encuesta}"
                     hash_registro = hashlib.md5(datos_unicos.encode()).hexdigest()
 
                     # Verificar si el registro ya existe en `Respuesta_borrador`
@@ -92,6 +92,7 @@ def importar_csv(request):
                             apellidos=row.get("Apellidos", "").strip(),
                             nro_documento=nro_documento,
                             genero=row.get("Género", "").strip(),
+                            pais=row.get("País actual de residencia", "").strip(),
                             ciudad=row.get("Ciudad actual de residencia", "").strip(),
                             estado_civil=row.get("Estado Civil", "").strip(),
                             campus_sede=row.get("Campus o sede de promoción", "").strip(),
@@ -105,7 +106,7 @@ def importar_csv(request):
                             estado=estado,
                         )
                     else:
-                        messages.warning(request, f"Registro con hash {hash_registro} ya existe en el borrador. ")
+                        messages.warning(request, f"Registro con C.I. Nº {nro_documento} ya se ha importado a la tabla preliminar. ")
 
                 except Exception as e:
                     return HttpResponse(f"Error procesando el registro Nº {nuevo_nro_registro}: {e}")
@@ -135,14 +136,21 @@ def ver_borrador(request):
             try:
                 borrador = Respuesta_borrador.objects.get(id=id_respuesta)
 
-                #  Convertir facultad, carrera, sexo y campus_sede a sus respectivos IDs
+                #  Convertir normalizadas a sus respectivos IDs
                 facultad_obj = Facultad.objects.filter(descripcion=borrador.facultad).first()
                 carrera_obj = Carrera.objects.filter(descripcion=borrador.carrera).first()
                 campus_sede_obj = CampusSede.objects.filter(descripcion=borrador.campus_sede).first()
                 genero_obj = Genero.objects.filter(descripcion=borrador.genero).first()
                 estado_civil_obj = EstadoCivil.objects.filter(descripcion=borrador.estado_civil).first()
+                pais_obj = Pais.objects.filter(descripcion=borrador.pais).first()
 
                 #  Validaciónes para evitar errores si no encuentra los IDs
+
+                if not campus_sede_obj:
+                    messages.error(request, f"Error en registro Nº {borrador.nro_registro}: Campus/Sede no encontrado.")
+                    continue
+
+
                 if not facultad_obj:
                     messages.error(request, f"Error en registro Nº {borrador.nro_registro}: Facultad no encontrada.")
                     continue
@@ -151,16 +159,16 @@ def ver_borrador(request):
                     messages.error(request, f"Error en registro Nº {borrador.nro_registro}: Carrera no encontrada.")
                     continue
 
-                if not campus_sede_obj:
-                    messages.error(request, f"Error en registro Nº {borrador.nro_registro}: Campus/Sede no encontrado.")
-                    continue
-
                 if not genero_obj:
                     messages.error(request, f"Error en registro Nº {borrador.nro_registro}: Género no encontrado.")
                     continue
 
                 if not estado_civil_obj:
                     messages.error(request, f"Error en registro Nº {borrador.nro_registro}: Estado Civil no encontrado.")
+                    continue
+
+                if not pais_obj:
+                    messages.error(request, f"Error en registro Nº {borrador.nro_registro}: País no encontrado.")
                     continue
 
 
@@ -181,6 +189,7 @@ def ver_borrador(request):
                     registro_existente.nombres = borrador.nombres
                     registro_existente.apellidos = borrador.apellidos
                     registro_existente.genero = genero_obj
+                    registro_existente.pais = pais_obj
                     registro_existente.ciudad = borrador.ciudad
                     registro_existente.estado_civil = estado_civil_obj
                     registro_existente.ano_ingreso = borrador.ano_ingreso
@@ -198,6 +207,7 @@ def ver_borrador(request):
                         apellidos=borrador.apellidos,
                         nro_documento=borrador.nro_documento,
                         genero=genero_obj,
+                        pais=pais_obj,
                         ciudad=borrador.ciudad,
                         estado_civil=estado_civil_obj,
                         campus_sede=campus_sede_obj,
@@ -260,8 +270,6 @@ def ver_exportados(request):
             apellidos__icontains=query
         ) | respuestas_borrador.filter(
             nro_documento__icontains=query
-        ) | respuestas_borrador.filter(
-            hash_valor__icontains=query
         )
 
     return render(request, "imp-exp-archivos/ver_exportados.html",

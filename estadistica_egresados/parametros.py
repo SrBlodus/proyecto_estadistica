@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Facultad, Carrera, CampusSede, Genero, EstadoCivil
+from .models import Facultad, Carrera, CampusSede, Genero, EstadoCivil, Pais
 
 # Son vistas que ya proporciona Django mismo para los ABMs
 
@@ -123,3 +123,25 @@ class EstadoCivilDeleteView(DeleteView):
     model = EstadoCivil
     template_name = "parametros/estado_civil_confirm_delete.html"
     success_url = reverse_lazy("estado_civil_list")
+
+class PaisListView(ListView):
+    model = Pais
+    template_name = "parametros/pais_list.html"
+    context_object_name = "paises"
+
+class PaisCreateView(CreateView):
+    model = Pais
+    template_name = "parametros/pais_form.html"
+    fields = ["id", "descripcion"]
+    success_url = reverse_lazy("pais_list")
+
+class PaisUpdateView(UpdateView):
+    model = Pais
+    template_name = "parametros/pais_form.html"
+    fields = ["id", "descripcion"]
+    success_url = reverse_lazy("pais_list")
+
+class PaisDeleteView(DeleteView):
+    model = Pais
+    template_name = "parametros/pais_confirm_delete.html"
+    success_url = reverse_lazy("pais_list")

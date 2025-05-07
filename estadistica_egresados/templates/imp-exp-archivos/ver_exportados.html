@@ -5,7 +5,7 @@
     <title>Tabla de Exportados</title>
 </head>
 <body>
-<<h2>Respuestas Exportadas</h2>
+<h2>Respuestas Exportadas</h2>
 <form method="GET">
     <input type="text" name="q" placeholder="Buscar..." value="{{ query }}">
     <button type="submit">Buscar</button>
@@ -32,10 +32,11 @@
             <th>Nº Teléfono</th>
             <th>Género</th>
             <th>Estado Civil</th>
+            <th>País Residencia</th>
+            <th>Ciudad Residencia</th>
             <th>Campus/Sede</th>
             <th>Facultad</th>
             <th>Carrera</th>
-            <th>Hash</th>
         </tr>
 
         {% for respuesta in respuestas %}
@@ -57,10 +58,11 @@
             <td>{{ respuesta.nro_telefono }}</td>
             <td>{{ respuesta.genero }}</td>
             <td>{{ respuesta.estado_civil }}</td>
+            <td>{{ respuesta.pais }} </td>
+            <td>{{ respuesta.ciudad }} </td>
             <td>{{ respuesta.campus_sede }}</td>
             <td>{{ respuesta.facultad }}</td>
             <td>{{ respuesta.carrera }}</td>
-            <td>{{ respuesta.hash_valor }}</td>
         </tr>
         {% endfor %}
     </table>

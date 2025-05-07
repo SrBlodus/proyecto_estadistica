@@ -6,7 +6,7 @@
 </head>
 <body>
 <h2>Respuestas en Borrador</h2>
-<p>Si quiere cargar la nueva encuesta de un alumno cuya encuesta anterior ya ha sido exportada, sólo seleccionelo y exportelo (Estará con Estado Duplicado) </p>
+<p>Si existe un registro del nuevo CSV importado cuya persona ya ha sido encuestado/a anteriormente, su encuesta tendrá el estado de "Duplicado". Si quiere actualizar su respuesta solamente seleccionelo y exportelo. </p>
 
 <form method="GET">
     <label for="estado">Filtrar por estado:</label>
@@ -38,6 +38,8 @@
             <th>Nº Teléfono</th>
             <th>Género</th>
             <th>Estado Civil</th>
+            <th>País Residencia</th>
+            <th>Ciudad Residencia</th>
             <th>Campus/Sede</th>
             <th>Facultad</th>
             <th>Carrera</th>
@@ -55,12 +57,14 @@
             {% endif %}
             <th>{{ respuesta.fecha_hora_encuesta }}</th>
             <th>{{ respuesta.fecha_hora_encuesta_anterior }}</th>
-            <td>{{ respuesta.apellidos }},{{ respuesta.nombres }} </td>
+            <td>{{ respuesta.apellidos }}, {{ respuesta.nombres }} </td>
             <td>{{ respuesta.nro_documento }} </td>
             <td>{{ respuesta.correo }}</td>
             <td>{{ respuesta.nro_telefono }} </td>
             <td>{{ respuesta.genero }} </td>
             <td>{{ respuesta.estado_civil }} </td>
+            <td>{{ respuesta.pais }} </td>
+            <td>{{ respuesta.ciudad }} </td>
             <td>{{ respuesta.campus_sede }} </td>
             <td>{{ respuesta.facultad }} </td>
             <td>{{ respuesta.carrera }} </td>

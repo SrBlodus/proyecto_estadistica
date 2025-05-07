@@ -11,11 +11,13 @@ class CampusSede(models.Model):
     descripcion = models.CharField(max_length=255, unique=True)  # Nombre del campus o sede
 
 class Genero(models.Model):
-    descripcion = models.CharField(max_length=255, unique=True)  # Nombre de la carrera
+    descripcion = models.CharField(max_length=255, unique=True)
 
 class EstadoCivil(models.Model):
-    descripcion = models.CharField(max_length=255, unique=True)  # Nombre de la carrera
+    descripcion = models.CharField(max_length=255, unique=True)
 
+class Pais(models.Model):
+    descripcion = models.CharField(max_length=255, unique=True)
 
 class Respuesta_borrador(models.Model):
     fecha_hora_encuesta = models.DateTimeField(null=True, blank=True)
@@ -27,6 +29,7 @@ class Respuesta_borrador(models.Model):
     nombres = models.CharField(max_length=255)
     apellidos = models.CharField(max_length=255)
     genero = models.CharField(max_length=50)
+    pais = models.CharField(max_length=255)
     ciudad = models.CharField(max_length=255)
     estado_civil = models.CharField(max_length=50)
     facultad = models.CharField(max_length=255)
@@ -46,7 +49,7 @@ class Respuesta_oficial(models.Model):
     nombres = models.CharField(max_length=100)
     apellidos = models.CharField(max_length=100)
     nro_documento = models.CharField(max_length=20)
-    ciudad = models.CharField(max_length=50)
+    ciudad = models.CharField(max_length=255)
 
     # Guarda las referencias a los IDs correctos
     campus_sede = models.ForeignKey(CampusSede, on_delete=models.PROTECT)
@@ -54,6 +57,7 @@ class Respuesta_oficial(models.Model):
     carrera = models.ForeignKey(Carrera, on_delete=models.PROTECT)
     genero = models.ForeignKey(Genero, on_delete=models.PROTECT)
     estado_civil = models.ForeignKey(EstadoCivil, on_delete=models.PROTECT)
+    pais = models.ForeignKey(Pais, on_delete=models.PROTECT)
 
     ano_ingreso = models.IntegerField()
     ano_egreso = models.IntegerField()

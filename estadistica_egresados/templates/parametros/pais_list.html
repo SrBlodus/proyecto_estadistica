@@ -1,0 +1,20 @@
+<h2>Listado de País</h2>
+<a href="{% url 'pais_create' %}">Agregar nuevo País</a>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Descripción</th>
+        <th>Acciones</th>
+    </tr>
+    {% for pais in paises %}
+    <tr>
+        <td>{{ pais.id }}</td>
+        <td>{{ pais.descripcion }}</td>
+        <td>
+            <a href="{% url 'pais_update' pais.id %}">Editar</a>
+            <a href="{% url 'pais_delete' pais.id %}">Eliminar</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{% url 'parametros_inicio' %}">Volver</a>
