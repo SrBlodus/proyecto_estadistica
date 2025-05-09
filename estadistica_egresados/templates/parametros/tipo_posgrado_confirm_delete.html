@@ -1,0 +1,7 @@
+<h2>Eliminar Tipo de Posgrado</h2>
+<p>¿Estás seguro de que deseas eliminar "{{ object.descripcion }}"?</p>
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit">Sí, eliminar</button>
+</form>
+<a href="{% url 'tipo_posgrado_list' %}">Cancelar</a>

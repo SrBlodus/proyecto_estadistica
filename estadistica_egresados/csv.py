@@ -2,14 +2,11 @@ from dateutil import parser
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 import csv
-from .models import Respuesta_borrador, Respuesta_oficial, Facultad, Carrera, CampusSede, Genero, EstadoCivil, Pais
+from .models import Respuesta_borrador, Respuesta_oficial, Facultad, Carrera, CampusSede, Genero, EstadoCivil, Pais, \
+    TipoPosgrado
 from .forms import CSVUploadForm
 from django.contrib import messages
 import hashlib
-
-
-
-
 
 def imp_exp_archivos_inicio(request):
     return render(request, "imp-exp-archivos/inicio_imp_exp_archivos.html")
@@ -81,6 +78,22 @@ def importar_csv(request):
                         ano_primer_empleo_carrera = convertir_a_entero(
                             row.get("Año en obtener primer empleo o emprendimiento relacionado a su carrera", ""))
 
+                        # Todas las respuestas base que tengan Sí o No serán definidas aquí
+                        preguntas_si_no = {
+                            "Trabaja actualmente o ha trabajado": "ind_trabajo",
+                            "¿Participaste en actividades, seminarios o charlas sobre tu carrera después de egresar?": "ind_participa_actividad_egresado",
+                            "¿Te gustaría seguir participando en actividades organizadas por tu facultad?":"ind_interes_participar_actividad_egresado",
+                            "¿Has considerado realizar un posgrado o especialización después de egresar?":"ind_interes_posgrado",
+                        }
+
+                        # Iterar sobre las preguntas y asignar "S", "N" o mantener vacío
+                        respuestas_si_no = {}
+                        for pregunta, variable in preguntas_si_no.items():
+                            respuesta = row.get(pregunta, "").strip()
+                            respuestas_si_no[variable] = "S" if respuesta == "Sí" else "N" if respuesta == "No" else ""
+
+
+
                         # Guardar en el borrador con valores sin convertir
                         Respuesta_borrador.objects.create(
                             fecha_hora_encuesta = fecha_hora_encuesta,
@@ -100,8 +113,13 @@ def importar_csv(request):
                             carrera=row.get("Carrera", "").strip(),
                             ano_ingreso=row.get("Año de ingreso", ""),
                             ano_egreso=row.get("Año de egreso", ""),
+                            ind_trabaja=respuestas_si_no["ind_trabajo"],
                             ano_primer_empleo=ano_primer_empleo,
                             ano_primer_empleo_carrera=ano_primer_empleo_carrera,
+                            ind_participa_actividad_egresado = respuestas_si_no["ind_participa_actividad_egresado"],
+                            ind_interes_participar_actividad_egresado = respuestas_si_no["ind_interes_participar_actividad_egresado"],
+                            ind_interes_posgrado = respuestas_si_no["ind_interes_posgrado"],
+                            tipo_posgrado = row.get("¿Qué tipo de posgrado crees que sería más relevante para el desarrollo profesional?", "").strip(),
                             hash_valor = hash_registro,
                             estado=estado,
                         )
@@ -136,6 +154,8 @@ def ver_borrador(request):
             try:
                 borrador = Respuesta_borrador.objects.get(id=id_respuesta)
 
+
+
                 #  Convertir normalizadas a sus respectivos IDs
                 facultad_obj = Facultad.objects.filter(descripcion=borrador.facultad).first()
                 carrera_obj = Carrera.objects.filter(descripcion=borrador.carrera).first()
@@ -143,6 +163,7 @@ def ver_borrador(request):
                 genero_obj = Genero.objects.filter(descripcion=borrador.genero).first()
                 estado_civil_obj = EstadoCivil.objects.filter(descripcion=borrador.estado_civil).first()
                 pais_obj = Pais.objects.filter(descripcion=borrador.pais).first()
+                tipo_posgrado_obj = TipoPosgrado.objects.filter(descripcion=borrador.tipo_posgrado).first()
 
                 #  Validaciónes para evitar errores si no encuentra los IDs
 
@@ -171,6 +192,10 @@ def ver_borrador(request):
                     messages.error(request, f"Error en registro Nº {borrador.nro_registro}: País no encontrado.")
                     continue
 
+                if not tipo_posgrado_obj:
+                    messages.error(request, f"Existe un registro con una respuesta no definida para el tipo de posgrado. Verifique el Google Forms con la lista de tipos de posgrado.")
+                    continue
+
 
                 registro_existente = Respuesta_oficial.objects.filter(
                     nro_documento=borrador.nro_documento,
@@ -194,8 +219,13 @@ def ver_borrador(request):
                     registro_existente.estado_civil = estado_civil_obj
                     registro_existente.ano_ingreso = borrador.ano_ingreso
                     registro_existente.ano_egreso = borrador.ano_egreso
+                    registro_existente.ind_trabaja = borrador.ind_trabaja
                     registro_existente.ano_primer_empleo = borrador.ano_primer_empleo
                     registro_existente.ano_primer_empleo_carrera = borrador.ano_primer_empleo_carrera
+                    registro_existente.ind_participa_actividad_egresado = borrador.ind_participa_actividad_egresado
+                    registro_existente.ind_interes_participar_actividad_egresado = borrador.ind_interes_participar_actividad_egresado
+                    registro_existente.ind_interes_posgrado = borrador.ind_interes_posgrado
+                    registro_existente.tipo_posgrado = tipo_posgrado_obj
                     registro_existente.save()  # Guardar cambios en `Respuesta_oficial`
                 else:
                     #  Crear nuevo registro si no existe en `Respuesta_oficial`
@@ -215,8 +245,13 @@ def ver_borrador(request):
                         carrera=carrera_obj,
                         ano_ingreso=borrador.ano_ingreso,
                         ano_egreso=borrador.ano_egreso,
+                        ind_trabaja=borrador.ind_trabaja,
                         ano_primer_empleo=borrador.ano_primer_empleo,
                         ano_primer_empleo_carrera=borrador.ano_primer_empleo_carrera,
+                        ind_participa_actividad_egresado=borrador.ind_participa_actividad_egresado,
+                        ind_interes_participar_actividad_egresado=borrador.ind_interes_participar_actividad_egresado,
+                        ind_interes_posgrado = borrador.ind_interes_posgrado,
+                        tipo_posgrado=tipo_posgrado_obj
                     )
                 # Marcar el registro como exportado
                 borrador.estado = "E"

@@ -1,0 +1,7 @@
+<h2>{% if object %}Editar Tipo de Posgrado{% else %}Nuevo Tipo de Posgrado{% endif %}</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar</button>
+</form>
+<a href="{% url 'tipo_posgrado_list' %}">Volver</a>

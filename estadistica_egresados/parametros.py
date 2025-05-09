@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Facultad, Carrera, CampusSede, Genero, EstadoCivil, Pais
+from .models import Facultad, Carrera, CampusSede, Genero, EstadoCivil, Pais, TipoPosgrado
 
 # Son vistas que ya proporciona Django mismo para los ABMs
 
@@ -145,3 +145,26 @@ class PaisDeleteView(DeleteView):
     model = Pais
     template_name = "parametros/pais_confirm_delete.html"
     success_url = reverse_lazy("pais_list")
+
+
+class TipoPosgradoListView(ListView):
+    model = TipoPosgrado
+    template_name = "parametros/tipo_posgrado_list.html"
+    context_object_name = "tipos_posgrado"
+
+class TipoPosgradoCreateView(CreateView):
+    model = TipoPosgrado
+    template_name = "parametros/tipo_posgrado_form.html"
+    fields = ["id", "descripcion"]
+    success_url = reverse_lazy("tipo_posgrado_list")
+
+class TipoPosgradoUpdateView(UpdateView):
+    model = TipoPosgrado
+    template_name = "parametros/tipo_posgrado_form.html"
+    fields = ["id", "descripcion"]
+    success_url = reverse_lazy("tipo_posgrado_list")
+
+class TipoPosgradoDeleteView(DeleteView):
+    model = TipoPosgrado
+    template_name = "parametros/tipo_posgrado_confirm_delete.html"
+    success_url = reverse_lazy("tipo_posgrado_list")

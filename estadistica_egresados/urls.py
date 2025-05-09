@@ -6,7 +6,9 @@ from .parametros import (FacultadListView, FacultadCreateView, FacultadUpdateVie
                          EstadoCivilListView, EstadoCivilCreateView,
                          EstadoCivilUpdateView, EstadoCivilDeleteView,
                          PaisListView, PaisCreateView,
-                         PaisUpdateView, PaisDeleteView
+                         PaisUpdateView, PaisDeleteView,
+                         TipoPosgradoListView, TipoPosgradoCreateView,
+                         TipoPosgradoUpdateView, TipoPosgradoDeleteView
                          )
 from .views import inicio
 from .csv import importar_csv, ver_borrador, imp_exp_archivos_inicio, ver_exportados
@@ -58,5 +60,10 @@ urlpatterns = [
     path("paises/editar/<pk>/", PaisUpdateView.as_view(), name="pais_update"),
     path("paises/eliminar/<pk>/", PaisDeleteView.as_view(), name="pais_delete"),
 
+    # URLs para TipoPosgrado
+    path("tipo-posgrado/", TipoPosgradoListView.as_view(), name="tipo_posgrado_list"),
+    path("tipo-posgrado/nuevo/", TipoPosgradoCreateView.as_view(), name="tipo_posgrado_create"),
+    path("tipo-posgrado/editar/<pk>/", TipoPosgradoUpdateView.as_view(), name="tipo_posgrado_update"),
+    path("tipo-posgrado/eliminar/<pk>/", TipoPosgradoDeleteView.as_view(), name="tipo_posgrado_delete"),
 
 ]

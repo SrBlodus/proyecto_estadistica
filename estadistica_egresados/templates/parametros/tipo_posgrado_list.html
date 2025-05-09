@@ -1,0 +1,20 @@
+<h2>Listado de Tipos de Posgrados</h2>
+<a href="{% url 'tipo_posgrado_create' %}">Agregar nuevo Tipos de Posgrados</a>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Descripción</th>
+        <th>Acciones</th>
+    </tr>
+    {% for tipo_posgrado in tipos_posgrado %}
+    <tr>
+        <td>{{ tipo_posgrado.id }}</td>
+        <td>{{ tipo_posgrado.descripcion }}</td>
+        <td>
+            <a href="{% url 'tipo_posgrado_update' tipo_posgrado.id %}">Editar</a>
+            <a href="{% url 'tipo_posgrado_delete' tipo_posgrado.id %}">Eliminar</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{% url 'parametros_inicio' %}">Volver</a>
