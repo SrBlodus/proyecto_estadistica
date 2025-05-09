@@ -120,6 +120,9 @@ def importar_csv(request):
                             ind_interes_participar_actividad_egresado = respuestas_si_no["ind_interes_participar_actividad_egresado"],
                             ind_interes_posgrado = respuestas_si_no["ind_interes_posgrado"],
                             tipo_posgrado = row.get("¿Qué tipo de posgrado crees que sería más relevante para el desarrollo profesional?", "").strip(),
+                            opcional_area_posgrado = row.get("¿Cuáles son las áreas que consideras que son necesarias para un posgrado para egresados de tu carrera? Ejemplo: Ciberseguridad, Análisis de Datos, etc.(Opcional)", "").strip(),
+                            opcional_estrategia_convocatoria = row.get("¿Qué estrategias podría implementar la facultad para mejorar la convocatoria de egresados?(Opcional)", "").strip(),
+                            opcional_contacto_carrera = row.get("¿Has mantenido contacto con docentes o compañeros de tu carrera para desarrollar oportunidades laborales?(Opcional)", "").strip(),
                             hash_valor = hash_registro,
                             estado=estado,
                         )
@@ -226,6 +229,9 @@ def ver_borrador(request):
                     registro_existente.ind_interes_participar_actividad_egresado = borrador.ind_interes_participar_actividad_egresado
                     registro_existente.ind_interes_posgrado = borrador.ind_interes_posgrado
                     registro_existente.tipo_posgrado = tipo_posgrado_obj
+                    registro_existente.opcional_area_posgrado = borrador.opcional_area_posgrado
+                    registro_existente.opcional_estrategia_convocatoria = borrador.opcional_estrategia_convocatoria
+                    registro_existente.opcional_contacto_carrera = borrador.opcional_contacto_carrera
                     registro_existente.save()  # Guardar cambios en `Respuesta_oficial`
                 else:
                     #  Crear nuevo registro si no existe en `Respuesta_oficial`
@@ -251,7 +257,11 @@ def ver_borrador(request):
                         ind_participa_actividad_egresado=borrador.ind_participa_actividad_egresado,
                         ind_interes_participar_actividad_egresado=borrador.ind_interes_participar_actividad_egresado,
                         ind_interes_posgrado = borrador.ind_interes_posgrado,
-                        tipo_posgrado=tipo_posgrado_obj
+                        tipo_posgrado=tipo_posgrado_obj,
+                        opcional_area_posgrado=borrador.opcional_area_posgrado,
+                        opcional_estrategia_convocatoria=borrador.opcional_estrategia_convocatoria,
+                        opcional_contacto_carrera=borrador.opcional_contacto_carrera,
+
                     )
                 # Marcar el registro como exportado
                 borrador.estado = "E"

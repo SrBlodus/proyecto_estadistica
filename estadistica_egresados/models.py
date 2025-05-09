@@ -52,6 +52,9 @@ class Respuesta_borrador(models.Model):
     ind_interes_participar_actividad_egresado = models.CharField(max_length=2)
     ind_interes_posgrado = models.CharField(max_length=2)
     tipo_posgrado = models.CharField(max_length=255)
+    opcional_area_posgrado = models.TextField(null=True, blank=True)
+    opcional_estrategia_convocatoria = models.TextField(null=True, blank=True)
+    opcional_contacto_carrera = models.TextField(null=True, blank=True)
 
     hash_valor = models.CharField(max_length=32, unique=True, null=True, blank=True)
     estado = models.CharField(max_length=1) # P: PENDIENTE, E: EXPORTADO, D: DUPLICADO
@@ -84,3 +87,6 @@ class Respuesta_oficial(models.Model):
     ind_interes_participar_actividad_egresado = models.CharField(max_length=2)
     ind_interes_posgrado = models.CharField(max_length=2)
     tipo_posgrado = models.ForeignKey(TipoPosgrado, on_delete=models.PROTECT)
+    opcional_area_posgrado = models.TextField(null=True, blank=True)
+    opcional_estrategia_convocatoria = models.TextField(null=True, blank=True)
+    opcional_contacto_carrera = models.TextField(null=True, blank=True)
