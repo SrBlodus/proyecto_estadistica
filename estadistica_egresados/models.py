@@ -44,8 +44,25 @@ class Respuesta_borrador(models.Model):
     ano_egreso = models.IntegerField()
     ind_trabaja = models.CharField(max_length=2)
 
-
+    #sección 2 del formulario
     ano_primer_empleo = models.IntegerField(null=True, blank=True)
+    ind_empleo_relacionado_carrera = models.CharField(max_length=2, null=True, blank=True)
+    ind_plan_curricular_optimo = models.CharField(max_length=2, null=True, blank=True)
+    valoracion_aprendizaje_docente = models.IntegerField(null=True, blank=True)
+    ind_materias_utiles = models.CharField(max_length=2, null=True, blank=True)
+    valoracion_impacto_formacion_academica_laboral = models.IntegerField(null=True, blank=True)
+    opcional_aprendizajes_no_curriculares = models.TextField(null=True, blank=True)
+
+
+
+
+
+
+
+
+
+
+
     ano_primer_empleo_carrera = models.IntegerField(null=True, blank=True)
 
     ind_participa_actividad_egresado = models.CharField(max_length=2)
@@ -79,14 +96,23 @@ class Respuesta_oficial(models.Model):
     ano_egreso = models.IntegerField()
     ind_trabaja = models.CharField(max_length=2)
 
-
     ano_primer_empleo = models.IntegerField(null=True, blank=True)
+    ind_empleo_relacionado_carrera = models.CharField(max_length=2,null=True, blank=True)
+    ind_plan_curricular_optimo = models.CharField(max_length=2,null=True, blank=True)
+    valoracion_aprendizaje_docente = models.IntegerField(null=True, blank=True)
+    ind_materias_utiles = models.CharField(max_length=2,null=True, blank=True)
+    valoracion_impacto_formacion_academica_laboral = models.IntegerField(null=True, blank=True)
+    opcional_aprendizajes_no_curriculares = models.TextField(null=True, blank=True)
+
+
+
+
     ano_primer_empleo_carrera = models.IntegerField(null=True, blank=True)
 
     ind_participa_actividad_egresado = models.CharField(max_length=2)
     ind_interes_participar_actividad_egresado = models.CharField(max_length=2)
     ind_interes_posgrado = models.CharField(max_length=2)
-    tipo_posgrado = models.ForeignKey(TipoPosgrado, on_delete=models.PROTECT)
+    tipo_posgrado = models.ForeignKey(TipoPosgrado, on_delete=models.PROTECT) #referencia a tabla
     opcional_area_posgrado = models.TextField(null=True, blank=True)
     opcional_estrategia_convocatoria = models.TextField(null=True, blank=True)
     opcional_contacto_carrera = models.TextField(null=True, blank=True)

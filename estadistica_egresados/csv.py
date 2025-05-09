@@ -84,6 +84,9 @@ def importar_csv(request):
                             "¿Participaste en actividades, seminarios o charlas sobre tu carrera después de egresar?": "ind_participa_actividad_egresado",
                             "¿Te gustaría seguir participando en actividades organizadas por tu facultad?":"ind_interes_participar_actividad_egresado",
                             "¿Has considerado realizar un posgrado o especialización después de egresar?":"ind_interes_posgrado",
+                            "Su empleo o emprendimiento esta o fue relacionado a su carrera":"ind_empleo_relacionado_carrera",
+                            "¿Consideras que el plan curricular fue óptimo para enfrentar los desafíos laborales?":"ind_plan_curricular_optimo",
+                            "¿Las materias en general que cursaste te fueron útiles en tu desempeño laboral?":"ind_materias_utiles",
                         }
 
                         # Iterar sobre las preguntas y asignar "S", "N" o mantener vacío
@@ -115,6 +118,12 @@ def importar_csv(request):
                             ano_egreso=row.get("Año de egreso", ""),
                             ind_trabaja=respuestas_si_no["ind_trabajo"],
                             ano_primer_empleo=ano_primer_empleo,
+                            ind_empleo_relacionado_carrera = respuestas_si_no["ind_empleo_relacionado_carrera"],
+                            ind_plan_curricular_optimo=respuestas_si_no["ind_plan_curricular_optimo"],
+                            valoracion_aprendizaje_docente=row.get("¿Cómo valoras los aprendizajes que los docentes te ayudaron a adquirir para tu desarrollo profesional?","").strip(),
+                            ind_materias_utiles = respuestas_si_no["ind_materias_utiles"],
+                            valoracion_impacto_formacion_academica_laboral = row.get("¿Cómo evaluarías el impacto de la formación académica en tu situación laboral actual?","").strip(),
+                            opcional_aprendizajes_no_curriculares = row.get("¿Qué aprendizajes no curriculares (actitudes, compromiso, liderazgo) consideras que fueron fundamentales para tu desarrollo laboral?(Opcional)","").strip(),
                             ano_primer_empleo_carrera=ano_primer_empleo_carrera,
                             ind_participa_actividad_egresado = respuestas_si_no["ind_participa_actividad_egresado"],
                             ind_interes_participar_actividad_egresado = respuestas_si_no["ind_interes_participar_actividad_egresado"],
@@ -224,6 +233,12 @@ def ver_borrador(request):
                     registro_existente.ano_egreso = borrador.ano_egreso
                     registro_existente.ind_trabaja = borrador.ind_trabaja
                     registro_existente.ano_primer_empleo = borrador.ano_primer_empleo
+                    registro_existente.ind_empleo_relacionado_carrera = borrador.ind_empleo_relacionado_carrera
+                    registro_existente.ind_plan_curricular_optimo = borrador.ind_plan_curricular_optimo
+                    registro_existente.valoracion_aprendizaje_docente = borrador.valoracion_aprendizaje_docente
+                    registro_existente.ind_materias_utiles = borrador.ind_materias_utiles
+                    registro_existente.valoracion_impacto_formacion_academica_laboral = borrador.valoracion_impacto_formacion_academica_laboral
+                    registro_existente.opcional_aprendizajes_no_curriculares = borrador.opcional_aprendizajes_no_curriculares
                     registro_existente.ano_primer_empleo_carrera = borrador.ano_primer_empleo_carrera
                     registro_existente.ind_participa_actividad_egresado = borrador.ind_participa_actividad_egresado
                     registro_existente.ind_interes_participar_actividad_egresado = borrador.ind_interes_participar_actividad_egresado
@@ -253,6 +268,12 @@ def ver_borrador(request):
                         ano_egreso=borrador.ano_egreso,
                         ind_trabaja=borrador.ind_trabaja,
                         ano_primer_empleo=borrador.ano_primer_empleo,
+                        ind_empleo_relacionado_carrera = borrador.ind_empleo_relacionado_carrera,
+                        ind_plan_curricular_optimo = borrador.ind_plan_curricular_optimo,
+                        valoracion_aprendizaje_docente = borrador.valoracion_aprendizaje_docente,
+                        ind_materias_utiles = borrador.ind_materias_utiles,
+                        valoracion_impacto_formacion_academica_laboral = borrador.valoracion_impacto_formacion_academica_laboral,
+                        opcional_aprendizajes_no_curriculares = borrador.opcional_aprendizajes_no_curriculares,
                         ano_primer_empleo_carrera=borrador.ano_primer_empleo_carrera,
                         ind_participa_actividad_egresado=borrador.ind_participa_actividad_egresado,
                         ind_interes_participar_actividad_egresado=borrador.ind_interes_participar_actividad_egresado,
