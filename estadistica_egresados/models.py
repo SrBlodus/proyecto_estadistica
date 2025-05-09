@@ -53,17 +53,16 @@ class Respuesta_borrador(models.Model):
     valoracion_impacto_formacion_academica_laboral = models.IntegerField(null=True, blank=True)
     opcional_aprendizajes_no_curriculares = models.TextField(null=True, blank=True)
 
-
-
-
-
-
-
-
-
-
-
+    # sección 3 del formulario
     ano_primer_empleo_carrera = models.IntegerField(null=True, blank=True)
+    ind_oportunidad_desarrollo_profesional = models.CharField(max_length=2, null=True, blank=True)
+    valoracion_estudios_trayectoria_profesional = models.IntegerField(null=True, blank=True)
+    opcional_influencia_en_trayectoria = models.TextField(null=True, blank=True)
+
+
+
+
+
 
     ind_participa_actividad_egresado = models.CharField(max_length=2)
     ind_interes_participar_actividad_egresado = models.CharField(max_length=2)
@@ -105,9 +104,10 @@ class Respuesta_oficial(models.Model):
     opcional_aprendizajes_no_curriculares = models.TextField(null=True, blank=True)
 
 
-
-
     ano_primer_empleo_carrera = models.IntegerField(null=True, blank=True)
+    ind_oportunidad_desarrollo_profesional = models.CharField(max_length=2, null=True, blank=True)
+    valoracion_estudios_trayectoria_profesional = models.IntegerField(null=True, blank=True)
+    opcional_influencia_en_trayectoria = models.TextField(null=True, blank=True)
 
     ind_participa_actividad_egresado = models.CharField(max_length=2)
     ind_interes_participar_actividad_egresado = models.CharField(max_length=2)

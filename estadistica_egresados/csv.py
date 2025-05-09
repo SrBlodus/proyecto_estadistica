@@ -87,6 +87,7 @@ def importar_csv(request):
                             "Su empleo o emprendimiento esta o fue relacionado a su carrera":"ind_empleo_relacionado_carrera",
                             "¿Consideras que el plan curricular fue óptimo para enfrentar los desafíos laborales?":"ind_plan_curricular_optimo",
                             "¿Las materias en general que cursaste te fueron útiles en tu desempeño laboral?":"ind_materias_utiles",
+                            "¿Has tenido oportunidades de desarrollo profesional, como ascensos o promociones?":"ind_oportunidad_desarrollo_profesional",
                         }
 
                         # Iterar sobre las preguntas y asignar "S", "N" o mantener vacío
@@ -125,6 +126,9 @@ def importar_csv(request):
                             valoracion_impacto_formacion_academica_laboral = row.get("¿Cómo evaluarías el impacto de la formación académica en tu situación laboral actual?","").strip(),
                             opcional_aprendizajes_no_curriculares = row.get("¿Qué aprendizajes no curriculares (actitudes, compromiso, liderazgo) consideras que fueron fundamentales para tu desarrollo laboral?(Opcional)","").strip(),
                             ano_primer_empleo_carrera=ano_primer_empleo_carrera,
+                            ind_oportunidad_desarrollo_profesional = respuestas_si_no["ind_oportunidad_desarrollo_profesional"],
+                            valoracion_estudios_trayectoria_profesional = row.get("¿Cómo valorarías el impacto de tus estudios en tu trayectoria profesional?","").strip(),
+                            opcional_influencia_en_trayectoria=row.get("¿Cómo consideras que la formación recibida haya influido en tu trayectoria profesional?(Opcional)","").strip(),
                             ind_participa_actividad_egresado = respuestas_si_no["ind_participa_actividad_egresado"],
                             ind_interes_participar_actividad_egresado = respuestas_si_no["ind_interes_participar_actividad_egresado"],
                             ind_interes_posgrado = respuestas_si_no["ind_interes_posgrado"],
@@ -240,6 +244,9 @@ def ver_borrador(request):
                     registro_existente.valoracion_impacto_formacion_academica_laboral = borrador.valoracion_impacto_formacion_academica_laboral
                     registro_existente.opcional_aprendizajes_no_curriculares = borrador.opcional_aprendizajes_no_curriculares
                     registro_existente.ano_primer_empleo_carrera = borrador.ano_primer_empleo_carrera
+                    registro_existente.ind_oportunidad_desarrollo_profesional = borrador.ind_oportunidad_desarrollo_profesional
+                    registro_existente.valoracion_estudios_trayectoria_profesional = borrador.valoracion_estudios_trayectoria_profesional
+                    registro_existente.opcional_influencia_en_trayectoria = borrador.opcional_influencia_en_trayectoria
                     registro_existente.ind_participa_actividad_egresado = borrador.ind_participa_actividad_egresado
                     registro_existente.ind_interes_participar_actividad_egresado = borrador.ind_interes_participar_actividad_egresado
                     registro_existente.ind_interes_posgrado = borrador.ind_interes_posgrado
@@ -274,7 +281,12 @@ def ver_borrador(request):
                         ind_materias_utiles = borrador.ind_materias_utiles,
                         valoracion_impacto_formacion_academica_laboral = borrador.valoracion_impacto_formacion_academica_laboral,
                         opcional_aprendizajes_no_curriculares = borrador.opcional_aprendizajes_no_curriculares,
+
                         ano_primer_empleo_carrera=borrador.ano_primer_empleo_carrera,
+                        ind_oportunidad_desarrollo_profesional = borrador.ind_oportunidad_desarrollo_profesional,
+                        valoracion_estudios_trayectoria_profesional = borrador.valoracion_estudios_trayectoria_profesional,
+                        opcional_influencia_en_trayectoria = borrador.opcional_influencia_en_trayectoria,
+
                         ind_participa_actividad_egresado=borrador.ind_participa_actividad_egresado,
                         ind_interes_participar_actividad_egresado=borrador.ind_interes_participar_actividad_egresado,
                         ind_interes_posgrado = borrador.ind_interes_posgrado,
