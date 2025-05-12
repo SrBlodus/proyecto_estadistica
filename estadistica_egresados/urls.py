@@ -12,6 +12,7 @@ from .parametros import (FacultadListView, FacultadCreateView, FacultadUpdateVie
                          )
 from .views import inicio
 from .csv import importar_csv, ver_borrador, imp_exp_archivos_inicio, ver_exportados
+from .estadistica_egresados import estadisticas_egresados
 
 urlpatterns = [
     path("",inicio, name="inicio"),
@@ -65,5 +66,9 @@ urlpatterns = [
     path("tipo-posgrado/nuevo/", TipoPosgradoCreateView.as_view(), name="tipo_posgrado_create"),
     path("tipo-posgrado/editar/<pk>/", TipoPosgradoUpdateView.as_view(), name="tipo_posgrado_update"),
     path("tipo-posgrado/eliminar/<pk>/", TipoPosgradoDeleteView.as_view(), name="tipo_posgrado_delete"),
+
+    # URLs para las Estadísticas
+    path("estadisticas/", estadisticas_egresados, name="estadisticas_egresados"),
+
 
 ]
