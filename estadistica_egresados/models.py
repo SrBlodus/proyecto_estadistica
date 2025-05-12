@@ -23,6 +23,7 @@ class TipoPosgrado(models.Model):
     descripcion = models.CharField(max_length=255, unique=True)
 
 class Respuesta_borrador(models.Model):
+    # sección 1 del formulario
     fecha_hora_encuesta = models.DateTimeField(null=True, blank=True)
     fecha_hora_encuesta_anterior = models.DateTimeField(null=True, blank=True)
     nro_registro = models.IntegerField(unique=True, blank=True, null=True)
@@ -59,11 +60,7 @@ class Respuesta_borrador(models.Model):
     valoracion_estudios_trayectoria_profesional = models.IntegerField(null=True, blank=True)
     opcional_influencia_en_trayectoria = models.TextField(null=True, blank=True)
 
-
-
-
-
-
+    # sección 4 del formulario
     ind_participa_actividad_egresado = models.CharField(max_length=2)
     ind_interes_participar_actividad_egresado = models.CharField(max_length=2)
     ind_interes_posgrado = models.CharField(max_length=2)
