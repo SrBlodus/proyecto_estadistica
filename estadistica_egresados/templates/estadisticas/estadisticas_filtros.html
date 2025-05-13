@@ -7,7 +7,19 @@
 
 <h3>Resultados</h3>
 <p>Total de egresados encontrados: {{ total_egresados }}</p>
-<p>Valoración promedio de estudios en la trayectoria profesional: {{ promedio_valoracion }}</p>
+<p>Valoración promedio de aprendizajes brindados por los docentes: {{ prom_valoracion_aprendizaje_docente }}</p>
+<p>Valoración promedio de el impacto de la formación académica en la situación laboral actual: {{ prom_valoracion_impacto_formacion_academica_laboral }}</p>
+<p>Valoración promedio de estudios en la trayectoria profesional: {{ prom_valoracion_estudios_trayectoria_profesional }}</p>
+
+
+{% if form.cleaned_data.mostrar_comentarios_ciudad_residencia %}
+<h3>Ciudades de Residencia</h3>
+<ul>
+    {% for egresado in egresados_filtrados %}
+    <li>{{ egresado.ciudad }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 
 {% if form.cleaned_data.mostrar_comentarios_aprendizajes_no_curriculares %}
 <h3>Aprendizajes No Curriculares</h3>
@@ -17,3 +29,42 @@
     {% endfor %}
 </ul>
 {% endif %}
+
+{% if form.cleaned_data.opcional_influencia_en_trayectoria %}
+<h3>Como o en que influyó la formación recibica en la trayectoria profesional</h3>
+<ul>
+    {% for egresado in egresados_filtrados %}
+    <li>{{ egresado.opcional_influencia_en_trayectoria }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if form.cleaned_data.opcional_area_posgrado %}
+<h3>Áreas o temas de interés para posgrados</h3>
+<ul>
+    {% for egresado in egresados_filtrados %}
+    <li>{{ egresado.opcional_area_posgrado }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if form.cleaned_data.opcional_estrategia_convocatoria %}
+<h3>Actividades sugeridas para la convocatoria de estudiantes</h3>
+<ul>
+    {% for egresado in egresados_filtrados %}
+    <li>{{ egresado.opcional_estrategia_convocatoria }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if form.cleaned_data.opcional_contacto_carrera %}
+<h3>Contacto en busca de desarrollo de oportunidades laborales</h3>
+<ul>
+    {% for egresado in egresados_filtrados %}
+    <li>{{ egresado.opcional_contacto_carrera }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+
