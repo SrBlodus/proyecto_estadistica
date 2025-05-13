@@ -1,0 +1,19 @@
+<h2>Consulta de Estadísticas de Egresados</h2>
+<p><strong>Total de registros en la base de datos:</strong> {{ total_registros }}</p>
+<form method="GET">
+    {{ form.as_p }}
+    <button type="submit">Buscar</button>
+</form>
+
+<h3>Resultados</h3>
+<p>Total de egresados encontrados: {{ total_egresados }}</p>
+<p>Valoración promedio de estudios en la trayectoria profesional: {{ promedio_valoracion }}</p>
+
+{% if form.cleaned_data.mostrar_comentarios_aprendizajes_no_curriculares %}
+<h3>Aprendizajes No Curriculares</h3>
+<ul>
+    {% for egresado in egresados_filtrados %}
+    <li>{{ egresado.opcional_aprendizajes_no_curriculares }}</li>
+    {% endfor %}
+</ul>
+{% endif %}

@@ -76,15 +76,15 @@ def importar_csv(request):
                         ano_primer_empleo = convertir_a_entero(
                             row.get("Año en obtener primer empleo o emprendimiento", ""))
                         ano_primer_empleo_carrera = convertir_a_entero(
-                            row.get("Año en obtener primer empleo o emprendimiento relacionado a su carrera", ""))
+                            row.get("Año en obtener su primer empleo/emprendimiento que este relacionado a su carrera", ""))
 
                         # Todas las respuestas base que tengan Sí o No serán definidas aquí
                         preguntas_si_no = {
-                            "Trabaja actualmente o ha trabajado": "ind_trabajo",
+                            "Trabaja o emprende actualmente": "ind_trabajo",
                             "¿Participaste en actividades, seminarios o charlas sobre tu carrera después de egresar?": "ind_participa_actividad_egresado",
                             "¿Te gustaría seguir participando en actividades organizadas por tu facultad?":"ind_interes_participar_actividad_egresado",
                             "¿Has considerado realizar un posgrado o especialización después de egresar?":"ind_interes_posgrado",
-                            "Su empleo o emprendimiento esta o fue relacionado a su carrera":"ind_empleo_relacionado_carrera",
+                            "¿Su empleo o emprendimiento esta relacionado a su carrera?":"ind_empleo_relacionado_carrera",
                             "¿Consideras que el plan curricular fue óptimo para enfrentar los desafíos laborales?":"ind_plan_curricular_optimo",
                             "¿Las materias en general que cursaste te fueron útiles en tu desempeño laboral?":"ind_materias_utiles",
                             "¿Has tenido oportunidades de desarrollo profesional, como ascensos o promociones?":"ind_oportunidad_desarrollo_profesional",
