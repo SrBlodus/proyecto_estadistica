@@ -10,16 +10,27 @@ def estadisticas_egresados(request):
     total_registros = Respuesta_oficial.objects.count()  # Cantidad General de encuestados
 
     if form.is_valid():
-        if form.cleaned_data["carrera"]:
-            egresados_filtrados = egresados_filtrados.filter(carrera=form.cleaned_data["carrera"])
         if form.cleaned_data["facultad"]:
             egresados_filtrados = egresados_filtrados.filter(facultad=form.cleaned_data["facultad"])
+
+        if form.cleaned_data["carrera"]:
+            egresados_filtrados = egresados_filtrados.filter(carrera=form.cleaned_data["carrera"])
+
+        if form.cleaned_data["genero"]:
+            egresados_filtrados = egresados_filtrados.filter(genero=form.cleaned_data["genero"])
+
         if form.cleaned_data["trabaja_actualmente"]:
             egresados_filtrados = egresados_filtrados.filter(ind_trabaja=form.cleaned_data["trabaja_actualmente"])
-        if form.cleaned_data["exterior"]:
-            egresados_filtrados = egresados_filtrados.filter(pais=form.cleaned_data["exterior"])
+
+        if form.cleaned_data["trabajo_relacionado"]:
+            egresados_filtrados = egresados_filtrados.filter(ind_empleo_relacionado_carrera=form.cleaned_data["trabajo_relacionado"])
+
+        if form.cleaned_data["pais"]:
+            egresados_filtrados = egresados_filtrados.filter(pais=form.cleaned_data["pais"])
+
         if form.cleaned_data["valoracion_minima"]:
             egresados_filtrados = egresados_filtrados.filter(valoracion_estudios_trayectoria_profesional__gte=form.cleaned_data["valoracion_minima"])
+
         if form.cleaned_data["tipo_posgrado"]:
             egresados_filtrados = egresados_filtrados.filter(tipo_posgrado=form.cleaned_data["tipo_posgrado"])
 
