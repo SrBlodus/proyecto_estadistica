@@ -78,6 +78,16 @@ def importar_csv(request):
                         ano_primer_empleo_carrera = convertir_a_entero(
                             row.get("Año en obtener su primer empleo/emprendimiento que este relacionado a su carrera", ""))
 
+                        valoracion_aprendizaje_docente = convertir_a_entero(
+                            row.get("¿Cómo valoras los aprendizajes que los docentes te ayudaron a adquirir para tu desarrollo profesional?", ""))
+                        valoracion_impacto_formacion_academica_laboral = convertir_a_entero(
+                            row.get("¿Cómo evaluarías el impacto de la formación académica en tu situación laboral actual?",""))
+                        valoracion_estudios_trayectoria_profesional =convertir_a_entero(
+                            row.get("¿Cómo valorarías el impacto de tus estudios en tu trayectoria profesional?",""))
+
+
+
+
                         # Todas las respuestas base que tengan Sí o No serán definidas aquí
                         preguntas_si_no = {
                             "Trabaja o emprende actualmente": "ind_trabajo",
@@ -121,14 +131,14 @@ def importar_csv(request):
                             ano_primer_empleo=ano_primer_empleo,
                             ind_empleo_relacionado_carrera = respuestas_si_no["ind_empleo_relacionado_carrera"],
                             ind_plan_curricular_optimo=respuestas_si_no["ind_plan_curricular_optimo"],
-                            valoracion_aprendizaje_docente=row.get("¿Cómo valoras los aprendizajes que los docentes te ayudaron a adquirir para tu desarrollo profesional?","").strip(),
+                            valoracion_aprendizaje_docente=valoracion_aprendizaje_docente,
                             ind_materias_utiles = respuestas_si_no["ind_materias_utiles"],
-                            valoracion_impacto_formacion_academica_laboral = row.get("¿Cómo evaluarías el impacto de la formación académica en tu situación laboral actual?","").strip(),
+                            valoracion_impacto_formacion_academica_laboral = valoracion_impacto_formacion_academica_laboral,
                             opcional_aprendizajes_no_curriculares = row.get("¿Qué aprendizajes no curriculares (actitudes, compromiso, liderazgo) consideras que fueron fundamentales para tu desarrollo laboral?(Opcional)","").strip(),
                             ano_primer_empleo_carrera=ano_primer_empleo_carrera,
                             ind_oportunidad_desarrollo_profesional = respuestas_si_no["ind_oportunidad_desarrollo_profesional"],
-                            valoracion_estudios_trayectoria_profesional = row.get("¿Cómo valorarías el impacto de tus estudios en tu trayectoria profesional?","").strip(),
-                            opcional_influencia_en_trayectoria=row.get("¿Cómo consideras que la formación recibida haya influido en tu trayectoria profesional?(Opcional)","").strip(),
+                            valoracion_estudios_trayectoria_profesional = valoracion_estudios_trayectoria_profesional,
+                            opcional_influencia_en_trayectoria=row.get("¿Cómo o en qué consideras que la formación recibida haya influido en tu trayectoria profesional?(Opcional)","").strip(),
                             ind_participa_actividad_egresado = respuestas_si_no["ind_participa_actividad_egresado"],
                             ind_interes_participar_actividad_egresado = respuestas_si_no["ind_interes_participar_actividad_egresado"],
                             ind_interes_posgrado = respuestas_si_no["ind_interes_posgrado"],
