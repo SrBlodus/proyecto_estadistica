@@ -1,23 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Página de Inicio</title>
-</head>
-<body>
-    <h1>Página de Inicio</h1>
-    <!-- Botón que redirige al formulario de carga -->
-    <a href="{% url 'inicio_imp_exp_archivos' %}">
-        <button>Ir a Importación/Exportación de Archivos</button>
-    </a>
-    <a href="{% url 'parametros_inicio' %}">
-        <button>Ir a Definición de Parámetros</button>
-    </a>
-    <a href="{% url 'estadisticas_egresados' %}">
-        <button>Ir a Consultas</button>
-    </a>
-    <a href="{% url 'lista_encuestados' %}">
-        <button>Ir a Lista de Encuestados</button>
-    </a>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Página de Inicio{% endblock %}
+
+{% block content %}
+    <h1>Dashboard</h1>
+    <p>Aquí podemos agregar algunas estadisticas definidas.</p>
+{% endblock %}

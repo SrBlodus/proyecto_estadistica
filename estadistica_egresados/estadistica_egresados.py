@@ -102,6 +102,7 @@ def estadisticas_egresados(request):
         "total_valoraciones_docente": total_valoraciones_docente,
         "total_valoraciones_impacto": total_valoraciones_impacto,
         "total_registros": total_registros,
+        "egresados_filtrados": egresados_filtrados,
     }
     return render(request, "estadisticas/estadisticas_filtros.html", context)
 

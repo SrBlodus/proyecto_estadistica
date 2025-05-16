@@ -1,16 +1,18 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Importar CSV</title>
-</head>
-<body>
-    <h2>Subir archivo CSV</h2>
+{% extends 'base.html' %}
+
+{% block title %}Importar CSV{% endblock %}
+
+{% block content %}
+    <h2>📂 Subir Archivo CSV</h2>
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Importar</button>
+        <button type="submit">🚀 Importar</button>
     </form>
-</body>
-<a href="{% url 'inicio_imp_exp_archivos' %}">Volver</a>
-</html>
+
+    <div style="margin-top: 20px;">
+        <a href="{% url 'inicio_imp_exp_archivos' %}" style="text-decoration: none;">
+            <button style="background-color: #ddd; border: none; padding: 10px; cursor: pointer;">⬅ Volver</button>
+        </a>
+    </div>
+{% endblock %}
