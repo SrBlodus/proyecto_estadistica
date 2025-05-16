@@ -1,3 +1,4 @@
+from django.contrib.auth.views import LogoutView
 from django.urls import path
 
 from .encuestados import lista_encuestados
@@ -12,12 +13,15 @@ from .parametros import (FacultadListView, FacultadCreateView, FacultadUpdateVie
                          TipoPosgradoListView, TipoPosgradoCreateView,
                          TipoPosgradoUpdateView, TipoPosgradoDeleteView
                          )
-from .views import inicio
+from .views import inicio, CustomLoginView, custom_logout
 from .csv import importar_csv, ver_borrador, imp_exp_archivos_inicio, ver_exportados
 from .estadistica_egresados import estadisticas_egresados
 
 urlpatterns = [
     path("",inicio, name="inicio"),
+    path("login/", CustomLoginView.as_view(), name="login"),
+
+    path("logout/", custom_logout, name="logout"),
 
     # URLs para la parte de la importación y exportación de los archivos
     path("importar_archivo", importar_csv, name="importar_csv"),
@@ -74,5 +78,6 @@ urlpatterns = [
 
     # URLs para ver las personas que han sido Encuestadas
     path("encuestados/", lista_encuestados, name="lista_encuestados"),
+
 
 ]

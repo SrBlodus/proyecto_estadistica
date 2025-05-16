@@ -1,8 +1,10 @@
 from django import forms
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from .models import Facultad, Carrera, Pais, TipoPosgrado, Genero, EstadoCivil
 
 # FORMULARIO PARA LA CARGA DEL ARCHIVO CSV
-class CSVUploadForm(forms.Form):
+class CSVUploadForm(LoginRequiredMixin, forms.Form):
     archivo_csv = forms.FileField(label="Selecciona un archivo CSV")
 
 
