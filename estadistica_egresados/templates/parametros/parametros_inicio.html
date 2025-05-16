@@ -1,36 +1,23 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Definición de Parámetros</title>
-</head>
-<body>
-<h2>Gestión de Parámetros</h2>
+{% extends 'base.html' %}
+
+{% block title %}Definición de Parámetros{% endblock %}
+
+{% block content %}
+<h2>⚙ Gestión de Parámetros</h2>
 <p>Selecciona la opción que deseas administrar:</p>
 
-<div style="display: flex; gap: 20px;">
-    <a href="{% url 'campus_sede_list' %}">
-        <button> Campus/Sedes</button>
-    </a>
-    <a href="{% url 'facultad_list' %}">
-        <button> Facultades</button>
-    </a>
-    <a href="{% url 'carrera_list' %}">
-        <button> Carreras</button>
-    </a>
-    <a href="{% url 'genero_list' %}">
-        <button> Géneros</button>
-    </a>
-    <a href="{% url 'estado_civil_list' %}">
-        <button> Estados Civiles</button>
-    </a>
-    <a href="{% url 'pais_list' %}">
-        <button> Países</button>
-    </a>
-    <a href="{% url 'tipo_posgrado_list' %}">
-        <button> Tipos de Posgrado</button>
+<div style="display: flex; flex-wrap: wrap; gap: 20px;">
+    <a href="{% url 'campus_sede_list' %}"><button>📍 Campus/Sedes</button></a>
+    <a href="{% url 'facultad_list' %}"><button>🏫 Facultades</button></a>
+    <a href="{% url 'carrera_list' %}"><button>🎓 Carreras</button></a>
+    <a href="{% url 'genero_list' %}"><button>🚻 Géneros</button></a>
+    <a href="{% url 'estado_civil_list' %}"><button>💍 Estados Civiles</button></a>
+    <a href="{% url 'pais_list' %}"><button>🌍 Países</button></a>
+    <a href="{% url 'tipo_posgrado_list' %}"><button>📚 Tipos de Posgrado</button></a>
+</div>
+<div style="margin-top: 20px;">
+    <a href="{% url 'inicio' %}" style="text-decoration: none;">
+        <button style="background-color: #ddd; border: none; padding: 10px; cursor: pointer;">⬅ Volver</button>
     </a>
 </div>
-</body>
-<a href="{% url 'inicio' %}">Volver</a>
-</html>
+{% endblock %}

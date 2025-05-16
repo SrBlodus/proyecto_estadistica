@@ -1,24 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Importación de Archivos</title>
-</head>
-<body>
-<h2>Gestión de Archivos</h2>
-<p>Selecciona la opción que desee realizar:</p>
+{% extends 'base.html' %}
 
-<div style="display: flex; gap: 20px;">
-    <a href="{% url 'importar_csv' %}">
-        <button> Cargar Nuevo Archivo CSV</button>
-    </a>
-    <a href="{% url 'ver_borrador' %}">
-        <button> Ver Registros Preliminares</button>
-    </a>
-    <a href="{% url 'ver_exportados' %}">
-        <button> Ver Registros Exportados</button>
+{% block title %}Importación de Archivos{% endblock %}
+
+{% block content %}
+<h2>📂 Gestión de Archivos</h2>
+<p>Selecciona la opción que deseas realizar:</p>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px;">
+    <a href="{% url 'importar_csv' %}"><button>📤 Cargar Nuevo Archivo CSV</button></a>
+    <a href="{% url 'ver_borrador' %}"><button>📝 Ver Registros Preliminares</button></a>
+    <a href="{% url 'ver_exportados' %}"><button>📦 Ver Registros Exportados</button></a>
+</div>
+<div style="margin-top: 20px;">
+    <a href="{% url 'inicio' %}" style="text-decoration: none;">
+        <button style="background-color: #ddd; border: none; padding: 10px; cursor: pointer;">⬅ Volver</button>
     </a>
 </div>
-</body>
-<a href="{% url 'inicio' %}">Volver</a>
-</html>
+{% endblock %}

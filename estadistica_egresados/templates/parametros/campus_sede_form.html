@@ -1,7 +1,20 @@
-<h2>{% if object %}Editar Campus/Sede{% else %}Nuevo Campus/Sede{% endif %}</h2>
+{% extends 'base.html' %}
+
+{% block title %}{% if object %}Editar Campus/Sede{% else %}Nuevo Campus/Sede{% endif %}{% endblock %}
+
+{% block content %}
+<h2>{% if object %}✏️ Editar Campus/Sede{% else %}➕ Nuevo Campus/Sede{% endif %}</h2>
+
 <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Guardar</button>
+    <button type="submit" style="background-color: #4CAF50; color: white; border: none; padding: 10px;">💾 Guardar</button>
 </form>
-<a href="{% url 'campus_sede_list' %}">Volver</a>
+
+<div style="margin-top: 20px;">
+    <a href="{% url 'campus_sede_list' %}" style="text-decoration: none;">
+        <button style="background-color: #ddd; border: none; padding: 10px; cursor: pointer;">⬅ Volver</button>
+    </a>
+</div>
+
+{% endblock %}

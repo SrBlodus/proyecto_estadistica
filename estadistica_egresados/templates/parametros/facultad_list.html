@@ -1,7 +1,16 @@
-<h2>Listado de Facultades</h2>
-<a href="{% url 'facultad_create' %}">Agregar nueva facultad</a>
-<table border="1">
-    <tr>
+{% extends 'base.html' %}
+
+{% block title %}Listado de Facultades{% endblock %}
+
+{% block content %}
+<h2>🏫 Listado de Facultades</h2>
+
+<a href="{% url 'facultad_create' %}" style="display: inline-block; margin-bottom: 10px;">
+    <button style="background-color: #4CAF50; color: white; border: none; padding: 10px;">➕ Agregar nueva Facultad</button>
+</a>
+
+<table border="1" style="width: 100%; border-collapse: collapse;">
+    <tr style="background-color: #f4f4f4;">
         <th>ID</th>
         <th>Descripción</th>
         <th>Acciones</th>
@@ -11,10 +20,16 @@
         <td>{{ facultad.id }}</td>
         <td>{{ facultad.descripcion }}</td>
         <td>
-            <a href="{% url 'facultad_update' facultad.id %}">Editar</a> |
-            <a href="{% url 'facultad_delete' facultad.id %}">Eliminar</a>
+            <a href="{% url 'facultad_update' facultad.id %}">✏️ Editar</a> |
+            <a href="{% url 'facultad_delete' facultad.id %}" style="color: red;">🗑️ Eliminar</a>
         </td>
     </tr>
     {% endfor %}
 </table>
-<a href="{% url 'parametros_inicio' %}">Volver</a>
+
+<div style="margin-top: 20px;">
+    <a href="{% url 'parametros_inicio' %}" style="text-decoration: none;">
+        <button style="background-color: #ddd; border: none; padding: 10px; cursor: pointer;">⬅ Volver</button>
+    </a>
+</div>
+{% endblock %}

@@ -1,7 +1,20 @@
-<h2>Eliminar Campus/Sede</h2>
-<p>¿Estás seguro de que deseas eliminar "{{ object.descripcion }}"?</p>
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Campus/Sede{% endblock %}
+
+{% block content %}
+<h2>⚠️ Eliminar Campus/Sede</h2>
+<p>¿Estás seguro de que deseas eliminar "<strong>{{ object.descripcion }}</strong>"?</p>
+
 <form method="POST">
     {% csrf_token %}
-    <button type="submit">Sí, eliminar</button>
+    <button type="submit" style="background-color: red; color: white; border: none; padding: 10px;">🗑️ Sí, eliminar</button>
 </form>
-<a href="{% url 'campus_sede_list' %}">Cancelar</a>
+
+<div style="margin-top: 20px;">
+    <a href="{% url 'campus_sede_list' %}" style="text-decoration: none;">
+        <button style="background-color: #ddd; border: none; padding: 10px; cursor: pointer;">❌ Cancelar</button>
+    </a>
+</div>
+
+{% endblock %}

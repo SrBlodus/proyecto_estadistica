@@ -1,13 +1,36 @@
-<h2>Consulta de Estadísticas de Egresados</h2>
-<a href="{% url 'inicio' %}">Volver</a>
+{% extends 'base.html' %}
+
+{% block title %}Consulta de Estadísticas de Egresados{% endblock %}
+
+{% block content %}
+<div style="margin-top: 20px;">
+    <a href="{% url 'inicio' %}" style="text-decoration: none;">
+        <button style="background-color: #ddd; border: none; padding: 10px; cursor: pointer;">⬅ Volver</button>
+    </a>
+</div>
+<h2>📊 Consulta de Estadísticas de Egresados</h2>
+
 <form method="GET">
     {{ form.as_p }}
-    <button type="submit">Buscar</button>
+    <button type="submit">🔍 Buscar</button>
 </form>
 
-<h3>Resultados</h3>
-<p><strong>Total de registros en la base de datos:</strong> {{ total_registros }}</p>
-<p>Total de egresados encontrados con filtros: {{ total_egresados }}</p>
+<hr>
+
+<h3>📌 Resumen de Resultados</h3>
+
+<table border="1">
+    <tr>
+        <th>Total de registros en la base de datos</th>
+        <td><strong>{{ total_registros }}</strong></td>
+    </tr>
+    <tr>
+        <th>Total de egresados encontrados con filtros</th>
+        <td>{{ total_egresados }}</td>
+    </tr>
+</table>
+
+<hr>
 
 <h3>📊 Resultados de Valoraciones</h3>
 <table border="1">
@@ -33,18 +56,19 @@
     </tr>
 </table>
 
+<hr>
 
 {% if form.cleaned_data.mostrar_comentarios_ciudad_residencia %}
-<h3>Ciudades de Residencia</h3>
+<h3>🌍 Ciudades de Residencia</h3>
 <ul>
     {% for egresado in egresados_filtrados %}
-    <li>{{ egresado.ciudad }}</li>
+    <li><strong>{{ egresado.ciudad }}</strong></li>
     {% endfor %}
 </ul>
 {% endif %}
 
 {% if form.cleaned_data.mostrar_comentarios_aprendizajes_no_curriculares %}
-<h3>Aprendizajes No Curriculares</h3>
+<h3>📖 Aprendizajes No Curriculares</h3>
 <ul>
     {% for egresado in egresados_filtrados %}
     <li>{{ egresado.opcional_aprendizajes_no_curriculares }}</li>
@@ -53,7 +77,7 @@
 {% endif %}
 
 {% if form.cleaned_data.opcional_influencia_en_trayectoria %}
-<h3>Como o en que influyó la formación recibica en la trayectoria profesional</h3>
+<h3>🎓 Influencia de la Formación en la Trayectoria Profesional</h3>
 <ul>
     {% for egresado in egresados_filtrados %}
     <li>{{ egresado.opcional_influencia_en_trayectoria }}</li>
@@ -62,7 +86,7 @@
 {% endif %}
 
 {% if form.cleaned_data.opcional_area_posgrado %}
-<h3>Áreas o temas de interés para posgrados</h3>
+<h3>📚 Áreas o Temas de Interés para Posgrados</h3>
 <ul>
     {% for egresado in egresados_filtrados %}
     <li>{{ egresado.opcional_area_posgrado }}</li>
@@ -71,7 +95,7 @@
 {% endif %}
 
 {% if form.cleaned_data.opcional_estrategia_convocatoria %}
-<h3>Actividades sugeridas para la convocatoria de estudiantes</h3>
+<h3>📢 Estrategias Sugeridas para la Convocatoria de Estudiantes</h3>
 <ul>
     {% for egresado in egresados_filtrados %}
     <li>{{ egresado.opcional_estrategia_convocatoria }}</li>
@@ -80,7 +104,7 @@
 {% endif %}
 
 {% if form.cleaned_data.opcional_contacto_carrera %}
-<h3>Contacto en busca de desarrollo de oportunidades laborales</h3>
+<h3>🤝 Contacto en Busca de Desarrollo de Oportunidades Laborales</h3>
 <ul>
     {% for egresado in egresados_filtrados %}
     <li>{{ egresado.opcional_contacto_carrera }}</li>
@@ -88,5 +112,6 @@
 </ul>
 {% endif %}
 
+<hr>
 
-
+{% endblock %}

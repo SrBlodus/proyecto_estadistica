@@ -1,16 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Encuestados{% endblock %}
+
+{% block content %}
+<div style="margin-top: 20px;">
+    <a href="{% url 'inicio' %}" style="text-decoration: none;">
+        <button style="background-color: #ddd; border: none; padding: 10px; cursor: pointer;">⬅ Volver</button>
+    </a>
+</div>
 <h2>📋 Lista de Encuestados</h2>
+
 
 <form method="GET">
     <input type="text" name="q" placeholder=" Buscar por nombre, apellido o documento" value="{{ query }}">
-    <button type="submit">Buscar</button>
-    <a href="{% url 'inicio' %}">Volver</a>
+    <button type="submit">🔎 Buscar</button>
 </form>
 
 <hr>
 
 {% if encuestados %}
-    <table border="1">
-        <tr>
+    <table border="1" style="width: 100%; border-collapse: collapse;">
+        <tr style="background-color: #f4f4f4;">
             <th>Fecha Encuesta</th>
             <th>Nombres</th>
             <th>Nº C.I.</th>
@@ -43,5 +53,7 @@
         {% endfor %}
     </table>
 {% else %}
-    <p>No se encontraron encuestados.</p>
+    <p style="color: red;">⚠ No se encontraron encuestados con los criterios de búsqueda.</p>
 {% endif %}
+
+{% endblock %}

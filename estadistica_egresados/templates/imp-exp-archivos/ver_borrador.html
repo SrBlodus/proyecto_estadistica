@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Tabla Preliminar</title>
-</head>
-<body>
-<h2>Respuestas en Borrador</h2>
-<p>Si existe un registro del nuevo CSV importado cuya persona ya ha sido encuestado/a anteriormente, su encuesta tendrá el estado de "Duplicado". Si quiere actualizar su respuesta solamente seleccionelo y exportelo. </p>
+{% extends 'base.html' %}
+
+{% block title %}Tabla Preliminar{% endblock %}
+
+{% block content %}
+<h2>📋 Respuestas en Borrador</h2>
+<p>Si existe un registro del nuevo CSV importado cuya persona ya ha sido encuestado/a anteriormente, su encuesta tendrá el estado de "Duplicado". Si quiere actualizar su respuesta, solamente selecciónelo y expórtelo.</p>
 
 <form method="GET">
     <label for="estado">Filtrar por estado:</label>
@@ -20,9 +18,9 @@
 <form method="POST">
     {% csrf_token %}
     {% if messages %}
-    {% for message in messages %}
-        <p style="color: green;">{{ message }}</p>
-    {% endfor %}
+        {% for message in messages %}
+            <p style="color: green;">{{ message }}</p>
+        {% endfor %}
     {% endif %}
 
     <table border="1">
@@ -31,7 +29,7 @@
             <th>Nº</th>
             <th>Estado</th>
             <th>Fecha Encuesta</th>
-            <th>Últ. Fecha Encuesta</th>
+            <th>Última Encuesta</th>
             <th>Nombres</th>
             <th>Nº C.I.</th>
             <th>Correo</th>
@@ -48,39 +46,37 @@
         <tr>
             <td><input type="checkbox" class="checkRegistro" name="seleccionadas" value="{{ respuesta.id }}"></td>
             <td>{{ respuesta.nro_registro }}</td>
-            {% if respuesta.estado == 'P' %}
-                <td>Pendiente</td>
-            {% elif respuesta.estado == 'D' %}
-                <td>Duplicado</td>
-            {% else %}
-                <td>Exportado</td>
-            {% endif %}
-            <th>{{ respuesta.fecha_hora_encuesta }}</th>
-            <th>{{ respuesta.fecha_hora_encuesta_anterior }}</th>
-            <td>{{ respuesta.apellidos }}, {{ respuesta.nombres }} </td>
-            <td>{{ respuesta.nro_documento }} </td>
+            <td>
+                {% if respuesta.estado == 'P' %}Pendiente
+                {% elif respuesta.estado == 'D' %}Duplicado
+                {% else %}Exportado
+                {% endif %}
+            </td>
+            <td>{{ respuesta.fecha_hora_encuesta }}</td>
+            <td>{{ respuesta.fecha_hora_encuesta_anterior }}</td>
+            <td>{{ respuesta.apellidos }}, {{ respuesta.nombres }}</td>
+            <td>{{ respuesta.nro_documento }}</td>
             <td>{{ respuesta.correo }}</td>
-            <td>{{ respuesta.nro_telefono }} </td>
-            <td>{{ respuesta.genero }} </td>
-            <td>{{ respuesta.estado_civil }} </td>
-            <td>{{ respuesta.pais }} </td>
-            <td>{{ respuesta.ciudad }} </td>
-            <td>{{ respuesta.campus_sede }} </td>
-            <td>{{ respuesta.facultad }} </td>
-            <td>{{ respuesta.carrera }} </td>
-
+            <td>{{ respuesta.nro_telefono }}</td>
+            <td>{{ respuesta.genero }}</td>
+            <td>{{ respuesta.estado_civil }}</td>
+            <td>{{ respuesta.pais }}</td>
+            <td>{{ respuesta.ciudad }}</td>
+            <td>{{ respuesta.campus_sede }}</td>
+            <td>{{ respuesta.facultad }}</td>
+            <td>{{ respuesta.carrera }}</td>
         </tr>
         {% endfor %}
     </table>
-        <button type="submit" name="accion" value="exportar">Exportar seleccionadas</button>
-    <button type="submit" name="accion" value="eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar estos registros?');">Eliminar seleccionadas</button>
+
+    <div style="margin-top: 20px;">
+        <button type="submit" name="accion" value="exportar">🚀 Exportar seleccionadas</button>
+        <button type="submit" name="accion" value="eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar estos registros?');">🗑️ Eliminar seleccionadas</button>
+    </div>
 
 </form>
-<script>
-    function seleccionarTodos() {
-        document.querySelectorAll(".checkRegistro").forEach(checkbox => checkbox.checked = true);
-    }
 
+<script>
     function toggleSeleccionarTodos() {
         let checkboxes = document.querySelectorAll(".checkRegistro");
         let estado = document.getElementById("checkTodos").checked;
@@ -88,7 +84,10 @@
     }
 </script>
 
+<div style="margin-top: 20px;">
+    <a href="{% url 'inicio_imp_exp_archivos' %}" style="text-decoration: none;">
+        <button style="background-color: #ddd; border: none; padding: 10px; cursor: pointer;">⬅ Volver</button>
+    </a>
+</div>
 
-</body>
-<a href="{% url 'inicio_imp_exp_archivos' %}">Volver</a>
-</html>
+{% endblock %}
