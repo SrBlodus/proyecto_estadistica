@@ -1,4 +1,5 @@
 from dateutil import parser
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 import csv
@@ -8,9 +9,10 @@ from .forms import CSVUploadForm
 from django.contrib import messages
 import hashlib
 
+@login_required
 def imp_exp_archivos_inicio(request):
     return render(request, "imp-exp-archivos/inicio_imp_exp_archivos.html")
-
+@login_required
 def importar_csv(request):
     if request.method == "POST":
         form = CSVUploadForm(request.POST, request.FILES)
@@ -161,7 +163,7 @@ def importar_csv(request):
         form = CSVUploadForm()
 
     return render(request, "imp-exp-archivos/importar_csv.html", {"form": form})
-
+@login_required
 def ver_borrador(request):
     if request.method == "POST":
         seleccionadas = request.POST.getlist("seleccionadas")
@@ -334,7 +336,7 @@ def ver_borrador(request):
 
     return render(request, "imp-exp-archivos/ver_borrador.html",
                   {"respuestas": respuestas_borrador, "estado_filtro": estado_filtro})
-
+@login_required
 def ver_exportados(request):
     if request.method == "POST":
         seleccionadas = request.POST.getlist("seleccionadas")

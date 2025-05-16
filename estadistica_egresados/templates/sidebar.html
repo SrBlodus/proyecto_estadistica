@@ -1,8 +1,33 @@
 <div class="sidebar">
-    <h3>Menú</h3>
-    <a href="{% url 'inicio' %}">🏠 Dashboard</a><br>
-    <a href="{% url 'inicio_imp_exp_archivos' %}">📂 Importación/Exportación</a><br>
-    <a href="{% url 'parametros_inicio' %}">🔧 Definición de Parámetros</a><br>
-    <a href="{% url 'estadisticas_egresados' %}">📊 Consultas</a><br>
-    <a href="{% url 'lista_encuestados' %}">📋 Lista de Encuestados</a>
+    <ul>
+        <h3>Menú</h3>
+        <a href="{% url 'inicio' %}">🏠 Dashboard</a><br>
+        {% if user.is_authenticated %}
+        <a href="{% url 'inicio_imp_exp_archivos' %}">📂 Importación/Exportación</a><br>
+        <a href="{% url 'parametros_inicio' %}">🔧 Definición de Parámetros</a><br>
+        {% endif %}
+        <a href="{% url 'estadisticas_egresados' %}">📊 Consultas</a><br>
+        <a href="{% url 'lista_encuestados' %}">📋 Lista de Encuestados</a>
+    </ul>
+
+    <hr>
+
+    <div style="margin-top: 20px; text-align: center;">
+        {% if user.is_authenticated %}
+        <p>Bienvenido, <strong>{{ user.username }}</strong></p>
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">
+                ❌ Cerrar Sesión
+            </button>
+        </form>
+
+        {% else %}
+        <a href="{% url 'login' %}">
+            <button style="background-color: #4CAF50; color: white; border: none; padding: 10px; width: 100%;">🔑 Iniciar
+                Sesión
+            </button>
+        </a>
+        {% endif %}
+    </div>
 </div>
