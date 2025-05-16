@@ -82,13 +82,28 @@ def estadisticas_egresados(request):
         if form.cleaned_data["tipo_posgrado"]:
             egresados_filtrados = egresados_filtrados.filter(tipo_posgrado=form.cleaned_data["tipo_posgrado"])
 
+    #  Cálculo de promedios
+    promedio_valoracion_estudios = egresados_filtrados.aggregate(Avg("valoracion_estudios_trayectoria_profesional"))["valoracion_estudios_trayectoria_profesional__avg"]
+    promedio_aprendizaje_docente = egresados_filtrados.aggregate(Avg("valoracion_aprendizaje_docente"))["valoracion_aprendizaje_docente__avg"]
+    promedio_impacto_laboral = egresados_filtrados.aggregate(Avg("valoracion_impacto_formacion_academica_laboral"))["valoracion_impacto_formacion_academica_laboral__avg"]
+
+    #  Contadores: ¿Cuántas personas han respondido las valoraciones?
+    total_valoraciones_estudios = egresados_filtrados.filter(valoracion_estudios_trayectoria_profesional__isnull=False).count()
+    total_valoraciones_docente = egresados_filtrados.filter(valoracion_aprendizaje_docente__isnull=False).count()
+    total_valoraciones_impacto = egresados_filtrados.filter(valoracion_impacto_formacion_academica_laboral__isnull=False).count()
+
     context = {
         "form": form,
         "total_egresados": egresados_filtrados.count(),
-        "prom_valoracion_estudios_trayectoria_profesional": egresados_filtrados.aggregate(Avg("valoracion_estudios_trayectoria_profesional"))["valoracion_estudios_trayectoria_profesional__avg"],
-        "prom_valoracion_aprendizaje_docente": egresados_filtrados.aggregate(Avg("valoracion_aprendizaje_docente"))["valoracion_aprendizaje_docente__avg"],
-        "prom_valoracion_impacto_formacion_academica_laboral": egresados_filtrados.aggregate(Avg("valoracion_impacto_formacion_academica_laboral"))["valoracion_impacto_formacion_academica_laboral__avg"],
+        "prom_valoracion_estudios_trayectoria_profesional": round(promedio_valoracion_estudios, 2) if promedio_valoracion_estudios else "No hay datos",
+        "prom_valoracion_aprendizaje_docente": round(promedio_aprendizaje_docente, 2) if promedio_aprendizaje_docente else "No hay datos",
+        "prom_valoracion_impacto_formacion_academica_laboral": round(promedio_impacto_laboral, 2) if promedio_impacto_laboral else "No hay datos",
+        "total_valoraciones_estudios": total_valoraciones_estudios,
+        "total_valoraciones_docente": total_valoraciones_docente,
+        "total_valoraciones_impacto": total_valoraciones_impacto,
         "total_registros": total_registros,
-        "egresados_filtrados": egresados_filtrados,
     }
     return render(request, "estadisticas/estadisticas_filtros.html", context)
+
+
+

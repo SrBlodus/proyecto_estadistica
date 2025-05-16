@@ -1,4 +1,6 @@
 from django.urls import path
+
+from .encuestados import lista_encuestados
 from .parametros import (FacultadListView, FacultadCreateView, FacultadUpdateView, FacultadDeleteView, CarreraListView,
                          CarreraCreateView, CarreraUpdateView, CarreraDeleteView,CampusSedeListView,CampusSedeCreateView,
                          CampusSedeUpdateView,CampusSedeDeleteView,parametros_inicio,
@@ -70,5 +72,7 @@ urlpatterns = [
     # URLs para las Estadísticas
     path("estadisticas/", estadisticas_egresados, name="estadisticas_egresados"),
 
+    # URLs para ver las personas que han sido Encuestadas
+    path("encuestados/", lista_encuestados, name="lista_encuestados"),
 
 ]
