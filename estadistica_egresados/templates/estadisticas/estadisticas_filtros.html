@@ -1,15 +1,37 @@
 <h2>Consulta de Estadísticas de Egresados</h2>
-<p><strong>Total de registros en la base de datos:</strong> {{ total_registros }}</p>
+<a href="{% url 'inicio' %}">Volver</a>
 <form method="GET">
     {{ form.as_p }}
     <button type="submit">Buscar</button>
 </form>
 
 <h3>Resultados</h3>
-<p>Total de egresados encontrados: {{ total_egresados }}</p>
-<p>Valoración promedio de aprendizajes brindados por los docentes: {{ prom_valoracion_aprendizaje_docente }}</p>
-<p>Valoración promedio de el impacto de la formación académica en la situación laboral actual: {{ prom_valoracion_impacto_formacion_academica_laboral }}</p>
-<p>Valoración promedio de estudios en la trayectoria profesional: {{ prom_valoracion_estudios_trayectoria_profesional }}</p>
+<p><strong>Total de registros en la base de datos:</strong> {{ total_registros }}</p>
+<p>Total de egresados encontrados con filtros: {{ total_egresados }}</p>
+
+<h3>📊 Resultados de Valoraciones</h3>
+<table border="1">
+    <tr>
+        <th>Concepto</th>
+        <th>Valoración Promedio</th>
+        <th>Personas que valoraron</th>
+    </tr>
+    <tr>
+        <td>Impacto de estudios en trayectoria profesional</td>
+        <td>{{ prom_valoracion_estudios_trayectoria_profesional }}</td>
+        <td>{{ total_valoraciones_estudios }}</td>
+    </tr>
+    <tr>
+        <td>Aprendizaje brindado por docentes</td>
+        <td>{{ prom_valoracion_aprendizaje_docente }}</td>
+        <td>{{ total_valoraciones_docente }}</td>
+    </tr>
+    <tr>
+        <td>Impacto de formación académica en la situación laboral</td>
+        <td>{{ prom_valoracion_impacto_formacion_academica_laboral }}</td>
+        <td>{{ total_valoraciones_impacto }}</td>
+    </tr>
+</table>
 
 
 {% if form.cleaned_data.mostrar_comentarios_ciudad_residencia %}
