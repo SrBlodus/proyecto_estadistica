@@ -48,16 +48,16 @@ def estadisticas_egresados(request):
 
         if form.cleaned_data["plan_curricular_optimo"]:
             egresados_filtrados = egresados_filtrados.filter(ind_plan_curricular_optimo=form.cleaned_data["plan_curricular_optimo"])
-
+        '''
         if form.cleaned_data["valoracion_aprendizaje_docente"]:
             egresados_filtrados = egresados_filtrados.filter(valoracion_aprendizaje_docente__gte=form.cleaned_data["valoracion_aprendizaje_docente"])
-
+        '''
         if form.cleaned_data["ind_materias_utiles"]:
             egresados_filtrados = egresados_filtrados.filter(ind_materias_utiles=form.cleaned_data["ind_materias_utiles"])
-
+        '''
         if form.cleaned_data["valoracion_impacto_formacion_academica_laboral"]:
             egresados_filtrados = egresados_filtrados.filter(valoracion_impacto_formacion_academica_laboral__gte=form.cleaned_data["valoracion_impacto_formacion_academica_laboral"])
-
+        '''
         if form.cleaned_data["ano_primer_empleo_carrera_min"]:
             egresados_filtrados = egresados_filtrados.filter(ano_primer_empleo_carrera__gte=form.cleaned_data["ano_primer_empleo_carrera_min"])
 
@@ -66,10 +66,10 @@ def estadisticas_egresados(request):
 
         if form.cleaned_data["ind_oportunidad_desarrollo_profesional"]:
             egresados_filtrados = egresados_filtrados.filter(ind_oportunidad_desarrollo_profesional=form.cleaned_data["ind_oportunidad_desarrollo_profesional"])
-
+        '''
         if form.cleaned_data["valoracion_estudios_trayectoria_profesional"]:
             egresados_filtrados = egresados_filtrados.filter(valoracion_estudios_trayectoria_profesional__gte=form.cleaned_data["valoracion_estudios_trayectoria_profesional"])
-
+        '''
         if form.cleaned_data["ind_participa_actividad_egresado"]:
             egresados_filtrados = egresados_filtrados.filter(ind_participa_actividad_egresado=form.cleaned_data["ind_participa_actividad_egresado"])
 
@@ -92,6 +92,26 @@ def estadisticas_egresados(request):
     total_valoraciones_docente = egresados_filtrados.filter(valoracion_aprendizaje_docente__isnull=False).count()
     total_valoraciones_impacto = egresados_filtrados.filter(valoracion_impacto_formacion_academica_laboral__isnull=False).count()
 
+    #COMENTARIOS QUE SON OPCIONALES, SE HACEN DOS FUNCIONES, UNA PARA QUITAR LOS COMENTARIOS DUPLICADOS Y OTRA PARA LAS RESPUESTAS VACIAS
+    ciudades_unicas_de_residencia = egresados_filtrados.values_list("ciudad", flat=True).distinct()
+    ciudades_unicas_de_residencia = [ciudad for ciudad in ciudades_unicas_de_residencia if ciudad and ciudad.strip()]
+
+    comentarios_unicos_de_opcional_aprendizajes_no_curriculares= egresados_filtrados.values_list("opcional_aprendizajes_no_curriculares", flat=True).distinct()
+    comentarios_unicos_de_opcional_aprendizajes_no_curriculares = [comentario for comentario in comentarios_unicos_de_opcional_aprendizajes_no_curriculares if comentario and comentario.strip()]
+
+    comentarios_unicos_de_opcional_influencia_en_trayectoria = egresados_filtrados.values_list("opcional_influencia_en_trayectoria", flat=True).distinct()
+    comentarios_unicos_de_opcional_influencia_en_trayectoria = [comentario for comentario in comentarios_unicos_de_opcional_influencia_en_trayectoria if comentario and comentario.strip()]
+
+    comentarios_unicos_de_opcional_area_posgrado = egresados_filtrados.values_list("opcional_area_posgrado", flat=True).distinct()
+    comentarios_unicos_de_opcional_area_posgrado = [comentario for comentario in comentarios_unicos_de_opcional_area_posgrado if comentario and comentario.strip()]
+
+    comentarios_unicos_de_opcional_estrategia_convocatoria = egresados_filtrados.values_list("opcional_estrategia_convocatoria", flat=True).distinct()
+    comentarios_unicos_de_opcional_estrategia_convocatoria = [comentario for comentario in comentarios_unicos_de_opcional_estrategia_convocatoria if comentario and comentario.strip()]
+
+    comentarios_unicos_de_opcional_contacto_carrera = egresados_filtrados.values_list("opcional_contacto_carrera", flat=True).distinct()
+    comentarios_unicos_de_opcional_contacto_carrera = [comentario for comentario in comentarios_unicos_de_opcional_contacto_carrera if comentario and comentario.strip()]
+
+
     context = {
         "form": form,
         "total_egresados": egresados_filtrados.count(),
@@ -103,6 +123,12 @@ def estadisticas_egresados(request):
         "total_valoraciones_impacto": total_valoraciones_impacto,
         "total_registros": total_registros,
         "egresados_filtrados": egresados_filtrados,
+        "comentarios_unicos_de_opcional_aprendizajes_no_curriculares": comentarios_unicos_de_opcional_aprendizajes_no_curriculares,
+        "ciudades_unicas_de_residencia": ciudades_unicas_de_residencia,
+        "comentarios_unicos_de_opcional_influencia_en_trayectoria": comentarios_unicos_de_opcional_influencia_en_trayectoria,
+        "comentarios_unicos_de_opcional_area_posgrado": comentarios_unicos_de_opcional_area_posgrado,
+        "comentarios_unicos_de_opcional_estrategia_convocatoria": comentarios_unicos_de_opcional_estrategia_convocatoria,
+        "comentarios_unicos_de_opcional_contacto_carrera":comentarios_unicos_de_opcional_contacto_carrera,
     }
     return render(request, "estadisticas/estadisticas_filtros.html", context)
 
