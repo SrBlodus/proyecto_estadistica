@@ -15,6 +15,7 @@ class FacultadListView(LoginRequiredMixin, ListView):
     model = Facultad
     template_name = "parametros/facultad_list.html"
     context_object_name = "facultades"
+    ordering = ["id"]
 
 # 🔹 Vista para crear una Facultad
 class FacultadCreateView(LoginRequiredMixin, CreateView):
@@ -40,6 +41,7 @@ class CarreraListView(LoginRequiredMixin, ListView):
     model = Carrera
     template_name = "parametros/carrera_list.html"
     context_object_name = "carreras"
+    ordering = ["id"]
 
 class CarreraCreateView(LoginRequiredMixin, CreateView):
     model = Carrera
@@ -63,6 +65,7 @@ class CampusSedeListView(LoginRequiredMixin, ListView):
     model = CampusSede
     template_name = "parametros/campus_sede_list.html"
     context_object_name = "campus_sedes"
+    ordering = ["id"]
 
 class CampusSedeCreateView(LoginRequiredMixin, CreateView):
     model = CampusSede
@@ -85,6 +88,7 @@ class GeneroListView(LoginRequiredMixin, ListView):
     model = Genero
     template_name = "parametros/genero_list.html"
     context_object_name = "generos"
+    ordering = ["id"]
 
 class GeneroCreateView(LoginRequiredMixin, CreateView):
     model = Genero
@@ -108,6 +112,7 @@ class EstadoCivilListView(LoginRequiredMixin, ListView):
     model = EstadoCivil
     template_name = "parametros/estado_civil_list.html"
     context_object_name = "estados_civiles"
+    ordering = ["id"]
 
 class EstadoCivilCreateView(LoginRequiredMixin, CreateView):
     model = EstadoCivil
@@ -130,6 +135,7 @@ class PaisListView(LoginRequiredMixin, ListView):
     model = Pais
     template_name = "parametros/pais_list.html"
     context_object_name = "paises"
+    ordering = ["id"]
 
 class PaisCreateView(LoginRequiredMixin, CreateView):
     model = Pais
@@ -153,6 +159,7 @@ class TipoPosgradoListView(LoginRequiredMixin, ListView):
     model = TipoPosgrado
     template_name = "parametros/tipo_posgrado_list.html"
     context_object_name = "tipos_posgrado"
+    ordering = ["id"]
 
 class TipoPosgradoCreateView(LoginRequiredMixin, CreateView):
     model = TipoPosgrado
