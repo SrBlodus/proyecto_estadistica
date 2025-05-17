@@ -14,7 +14,7 @@ from .parametros import (FacultadListView, FacultadCreateView, FacultadUpdateVie
                          TipoPosgradoUpdateView, TipoPosgradoDeleteView
                          )
 from .views import inicio, CustomLoginView, custom_logout
-from .csv import importar_csv, ver_borrador, imp_exp_archivos_inicio, ver_exportados
+from .csv import importar_csv, ver_borrador, imp_exp_archivos_inicio, ver_exportados, descargar_csv
 from .estadistica_egresados import estadisticas_egresados
 
 urlpatterns = [
@@ -28,6 +28,7 @@ urlpatterns = [
     path("ver_borrador",ver_borrador,name="ver_borrador"),
     path("ver_exportados",ver_exportados,name="ver_exportados"),
     path("imp-exp-archivos",imp_exp_archivos_inicio,name="inicio_imp_exp_archivos"),
+    path("descargar_csv/", descargar_csv, name="descargar_csv"),
 
     # URLs para el inicio de parámetros
     path("parametros/", parametros_inicio, name="parametros_inicio"),
