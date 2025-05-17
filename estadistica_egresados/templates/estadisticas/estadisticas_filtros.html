@@ -10,10 +10,53 @@
 </div>
 <h2>📊 Consulta de Estadísticas de Egresados</h2>
 
-<form method="GET">
-    {{ form.as_p }}
-    <button type="submit">🔍 Buscar</button>
+<form method="GET" class="form-container">
+
+    <div class="form-section">
+        <h3>Filtros por Datos Generales</h3>
+        <div class="form-group">{{ form.facultad.label_tag }} {{ form.facultad }}</div>
+        <div class="form-group">{{ form.carrera.label_tag }} {{ form.carrera }}</div>
+        <div class="form-group">{{ form.genero.label_tag }} {{ form.genero }}</div>
+        <div class="form-group">{{ form.estado_civil.label_tag }} {{ form.estado_civil }}</div>
+        <div class="form-group">{{ form.pais.label_tag }} {{ form.pais }}</div>
+        <div class="form-group">{{ form.mostrar_comentarios_ciudad_residencia.label_tag }} {{ form.mostrar_comentarios_ciudad_residencia }}</div>
+        <div class="form-group">{{ form.ano_ingreso_min.label_tag }} {{ form.ano_ingreso_min }}</div>
+        <div class="form-group">{{ form.ano_ingreso_max.label_tag }} {{ form.ano_ingreso_max }}</div>
+        <div class="form-group">{{ form.ano_egreso_min.label_tag }} {{ form.ano_egreso_min }}</div>
+        <div class="form-group">{{ form.ano_egreso_max.label_tag }} {{ form.ano_egreso_max }}</div>
+
+    </div>
+
+    <div class="form-section">
+        <h3>Filtros por Situación Laboral</h3>
+        <div class="form-group">{{ form.trabaja_actualmente.label_tag }} {{ form.trabaja_actualmente }}</div>
+        <div class="form-group">{{ form.ano_primer_empleo_min.label_tag }} {{ form.ano_primer_empleo_min }}</div>
+        <div class="form-group">{{ form.ano_primer_empleo_max.label_tag }} {{ form.ano_primer_empleo_max }}</div>
+        <div class="form-group">{{ form.trabajo_relacionado.label_tag }} {{ form.trabajo_relacionado }}</div>
+        <div class="form-group">{{ form.ano_primer_empleo_carrera_min.label_tag }} {{ form.ano_primer_empleo_carrera_min }}</div>
+        <div class="form-group">{{ form.ano_primer_empleo_carrera_max.label_tag }} {{ form.ano_primer_empleo_carrera_max }}</div>
+        <div class="form-group">{{ form.plan_curricular_optimo.label_tag }} {{ form.plan_curricular_optimo }}</div>
+        <div class="form-group">{{ form.ind_materias_utiles.label_tag }} {{ form.ind_materias_utiles }}</div>
+        <div class="form-group">{{ form.mostrar_comentarios_aprendizajes_no_curriculares.label_tag }} {{ form.mostrar_comentarios_aprendizajes_no_curriculares }}</div>
+        <div class="form-group">{{ form.ind_oportunidad_desarrollo_profesional.label_tag }} {{ form.ind_oportunidad_desarrollo_profesional }}</div>
+        <div class="form-group">{{ form.opcional_influencia_en_trayectoria.label_tag }} {{ form.opcional_influencia_en_trayectoria }}</div>
+
+    </div>
+
+    <div class="form-section">
+        <h3>Filtros por Vínculos con la Universidad</h3>
+        <div class="form-group">{{ form.ind_participa_actividad_egresado.label_tag }} {{ form.ind_participa_actividad_egresado }}</div>
+        <div class="form-group">{{ form.ind_interes_participar_actividad_egresado.label_tag }} {{ form.ind_interes_participar_actividad_egresado }}</div>
+        <div class="form-group">{{ form.ind_interes_posgrado.label_tag }} {{ form.ind_interes_posgrado }}</div>
+        <div class="form-group">{{ form.tipo_posgrado.label_tag }} {{ form.tipo_posgrado }}</div>
+        <div class="form-group">{{ form.opcional_area_posgrado.label_tag }} {{ form.opcional_area_posgrado }}</div>
+        <div class="form-group">{{ form.opcional_estrategia_convocatoria.label_tag }} {{ form.opcional_estrategia_convocatoria }}</div>
+        <div class="form-group">{{ form.opcional_contacto_carrera.label_tag }} {{ form.opcional_contacto_carrera }}</div>
+    </div>
+
+    <button type="submit" class="submit-btn">🔍 Buscar</button>
 </form>
+
 
 <hr>
 
@@ -57,7 +100,7 @@
 </table>
 
 <hr>
-
+<!--
 {% if form.cleaned_data.mostrar_comentarios_ciudad_residencia %}
 <h3>🌍 Ciudades de Residencia</h3>
 <ul>
@@ -66,7 +109,16 @@
     {% endfor %}
 </ul>
 {% endif %}
-
+-->
+{% if form.cleaned_data.mostrar_comentarios_ciudad_residencia %}
+<h3>🌍 Ciudades de Residencia</h3>
+<ul>
+    {% for ciudad in ciudades_unicas_de_residencia %}
+    <li><strong>{{ ciudad }}</strong></li>
+    {% endfor %}
+</ul>
+{% endif %}
+<!--
 {% if form.cleaned_data.mostrar_comentarios_aprendizajes_no_curriculares %}
 <h3>📖 Aprendizajes No Curriculares</h3>
 <ul>
@@ -75,7 +127,16 @@
     {% endfor %}
 </ul>
 {% endif %}
-
+-->
+{% if form.cleaned_data.mostrar_comentarios_aprendizajes_no_curriculares %}
+<h3>📖 Aprendizajes No Curriculares</h3>
+<ul>
+    {% for comentario in comentarios_unicos_de_opcional_aprendizajes_no_curriculares %}
+    <li>{{ comentario }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<!--
 {% if form.cleaned_data.opcional_influencia_en_trayectoria %}
 <h3>🎓 Influencia de la Formación en la Trayectoria Profesional</h3>
 <ul>
@@ -84,7 +145,16 @@
     {% endfor %}
 </ul>
 {% endif %}
-
+-->
+{% if form.cleaned_data.opcional_influencia_en_trayectoria %}
+<h3>🎓 Influencia de la Formación en la Trayectoria Profesional</h3>
+<ul>
+    {% for comentarios in comentarios_unicos_de_opcional_influencia_en_trayectoria %}
+    <li>{{ comentarios }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<!--
 {% if form.cleaned_data.opcional_area_posgrado %}
 <h3>📚 Áreas o Temas de Interés para Posgrados</h3>
 <ul>
@@ -93,7 +163,16 @@
     {% endfor %}
 </ul>
 {% endif %}
-
+-->
+{% if form.cleaned_data.opcional_area_posgrado %}
+<h3>📚 Áreas o Temas de Interés para Posgrados</h3>
+<ul>
+    {% for comentario in comentarios_unicos_de_opcional_area_posgrado %}
+    <li>{{ comentario }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<!--
 {% if form.cleaned_data.opcional_estrategia_convocatoria %}
 <h3>📢 Estrategias Sugeridas para la Convocatoria de Estudiantes</h3>
 <ul>
@@ -102,12 +181,30 @@
     {% endfor %}
 </ul>
 {% endif %}
-
+-->
+{% if form.cleaned_data.opcional_estrategia_convocatoria %}
+<h3>📢 Estrategias Sugeridas para la Convocatoria de Estudiantes</h3>
+<ul>
+    {% for comentario in comentarios_unicos_de_opcional_estrategia_convocatoria %}
+    <li>{{ comentario }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<!--
 {% if form.cleaned_data.opcional_contacto_carrera %}
 <h3>🤝 Contacto en Busca de Desarrollo de Oportunidades Laborales</h3>
 <ul>
     {% for egresado in egresados_filtrados %}
     <li>{{ egresado.opcional_contacto_carrera }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+-->
+{% if form.cleaned_data.opcional_contacto_carrera %}
+<h3>🤝 Contacto en Busca de Desarrollo de Oportunidades Laborales</h3>
+<ul>
+    {% for comentario in comentarios_unicos_de_opcional_contacto_carrera %}
+    <li>{{ comentario }}</li>
     {% endfor %}
 </ul>
 {% endif %}

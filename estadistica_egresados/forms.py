@@ -10,9 +10,11 @@ class CSVUploadForm(LoginRequiredMixin, forms.Form):
 
 # FORMULARIO PARA REALIZAR LA CONSULTA PAR QUITAR DATOS ESTADISTICOS
 class EstadisticasFiltroForm(forms.Form):
+
     facultad = forms.ModelChoiceField(
         queryset=Facultad.objects.all(),
         required=False,
+        empty_label="Todos",
         label="Facultad",
         widget=forms.Select(attrs={"class": "form-control"}),
     )
@@ -20,6 +22,7 @@ class EstadisticasFiltroForm(forms.Form):
     carrera = forms.ModelChoiceField(
         queryset=Carrera.objects.all(),
         required=False,
+        empty_label="Todos",
         label="Carrera",
         widget=forms.Select(attrs={"class": "form-control"}),
     )
@@ -27,49 +30,53 @@ class EstadisticasFiltroForm(forms.Form):
     genero = forms.ModelChoiceField(
         queryset=Genero.objects.all(),
         required=False,
+        empty_label="Todos",
         label="Género",
+        widget=forms.Select(attrs={"class": "form-control"}),
+    )
+
+    estado_civil = forms.ModelChoiceField(
+        queryset=EstadoCivil.objects.all(),
+        required=False,
+        empty_label="Todos",
+        label="Estado Civil",
         widget=forms.Select(attrs={"class": "form-control"}),
     )
 
     pais = forms.ModelChoiceField(
         queryset=Pais.objects.all(),
         required=False,
+        empty_label="Todos",
         label="País Residencia",
         widget=forms.Select(attrs={"class": "form-control"}),
     )
 
     mostrar_comentarios_ciudad_residencia = forms.BooleanField(required=False,label="Mostrar Ciudades de Residencia")
 
-    estado_civil = forms.ModelChoiceField(
-        queryset=EstadoCivil.objects.all(),
-        required=False,
-        label="Estado Civil",
-        widget=forms.Select(attrs={"class": "form-control"}),
-    )
 
     ano_ingreso_min = forms.IntegerField(required=False, label="Año de ingreso (desde)")
     ano_ingreso_max = forms.IntegerField(required=False, label="Año de ingreso (hasta)")
     ano_egreso_min = forms.IntegerField(required=False, label="Año de egreso (desde)")
     ano_egreso_max = forms.IntegerField(required=False, label="Año de egreso (hasta)")
 
-    trabaja_actualmente = forms.ChoiceField(choices=[("", "Todos"), ("S", "Sí"), ("N", "No")], required=False, label="¿Trabaja o emprende actualmente?")
+    trabaja_actualmente = forms.ChoiceField(choices=[("", "Todos"), ("S", "Sí"), ("N", "No")], required=False, label="Trabaja o emprende actualmente")
 
 
     ano_primer_empleo_min = forms.IntegerField(required=False, label="Año de primer empleo/emprendimiento (desde)")
     ano_primer_empleo_max = forms.IntegerField(required=False, label="Año de empleo/emprendimiento (hasta)")
 
     trabajo_relacionado = forms.ChoiceField(choices=[("", "Todos"), ("S", "Sí"), ("N", "No")], required=False,
-                                            label="¿Trabajo o emprendimiento relacionado a carrera?")
+                                            label="Trabajo o emprendimiento relacionado a carrera")
 
     plan_curricular_optimo= forms.ChoiceField(choices=[("", "Todos"), ("S", "Sí"), ("N", "No")], required=False,
-                                            label="¿Plan curricular óptimo para enfrentar desafíos laborales?")
+                                            label="Plan curricular óptimo para enfrentar desafíos laborales")
 
-    valoracion_aprendizaje_docente = forms.IntegerField(min_value=1, max_value=5, required=False, label="Valoración mínima (1-5) de los aprendizajes brindados por los docentes para el desarrollo profesional")
+    #valoracion_aprendizaje_docente = forms.IntegerField(min_value=1, max_value=5, required=False, label="Valoración mínima (1-5) de los aprendizajes brindados por los docentes para el desarrollo profesional")
 
     ind_materias_utiles= forms.ChoiceField(choices=[("", "Todos"), ("S", "Sí"), ("N", "No")], required=False,
                                             label="Materias en general útiles para desempeño laboral")
 
-    valoracion_impacto_formacion_academica_laboral = forms.IntegerField(min_value=1, max_value=5, required=False, label="Valoración mínima (1-5) del impacto de la formación académica en la situación laboral actual?")
+    #valoracion_impacto_formacion_academica_laboral = forms.IntegerField(min_value=1, max_value=5, required=False, label="Valoración mínima (1-5) del impacto de la formación académica en la situación laboral actual?")
 
     mostrar_comentarios_aprendizajes_no_curriculares = forms.BooleanField(required=False,label="Mostrar Aprendizajes no curriculares que se consideraron fundamentales para el desarrollo laboral")
 
@@ -79,9 +86,9 @@ class EstadisticasFiltroForm(forms.Form):
     ind_oportunidad_desarrollo_profesional = forms.ChoiceField(choices=[("", "Todos"), ("S", "Sí"), ("N", "No")], required=False,
                                             label="Oportunidad de desarrollo profesional")
 
-    valoracion_estudios_trayectoria_profesional = forms.IntegerField(min_value=1, max_value=5, required=False, label="Valoración mínima (1-5) en el impacto de los estudios en la trayectoria profesional")
+    #valoracion_estudios_trayectoria_profesional = forms.IntegerField(min_value=1, max_value=5, required=False, label="Valoración mínima (1-5) en el impacto de los estudios en la trayectoria profesional")
 
-    opcional_influencia_en_trayectoria = forms.BooleanField(required=False,label="Comentarios de influencia de la educación recibida en la trayectoria profesional")
+    opcional_influencia_en_trayectoria = forms.BooleanField(required=False,label="Comentarios sobre la influencia de la educación recibida en la trayectoria profesional")
 
     ind_participa_actividad_egresado = forms.ChoiceField(choices=[("", "Todos"), ("S", "Sí"), ("N", "No")], required=False,
                                             label="Participación en actividades organizadas por la facultad")
@@ -96,6 +103,7 @@ class EstadisticasFiltroForm(forms.Form):
     tipo_posgrado = forms.ModelChoiceField(
         queryset=TipoPosgrado.objects.all(),
         required=False,
+        empty_label="Todos",
         label="Tipo de Posgrado",
         widget=forms.Select(attrs={"class": "form-control"}),
     )
