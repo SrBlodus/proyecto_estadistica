@@ -1,17 +1,23 @@
+import gspread
 from dateutil import parser
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 import csv
+import pandas as pd
+
+from PROYECTO_GRAL.settings import BASE_DIR
 from .models import Respuesta_borrador, Respuesta_oficial, Facultad, Carrera, CampusSede, Genero, EstadoCivil, Pais, \
     TipoPosgrado
 from .forms import CSVUploadForm
 from django.contrib import messages
 import hashlib
+import os
 
 @login_required
 def imp_exp_archivos_inicio(request):
     return render(request, "imp-exp-archivos/inicio_imp_exp_archivos.html")
+
 @login_required
 def importar_csv(request):
     if request.method == "POST":
@@ -115,7 +121,7 @@ def importar_csv(request):
                             fecha_hora_encuesta = fecha_hora_encuesta,
                             fecha_hora_encuesta_anterior = fecha_hora_encuesta_anterior,
                             nro_registro=nuevo_nro_registro,
-                            correo=row.get("Nombre de usuario", "").strip(),
+                            correo=row.get("Dirección de correo electrónico", "").strip(),
                             nro_telefono=row.get("Número de teléfono", "").strip(),
                             nombres=row.get("Nombres", "").strip(),
                             apellidos=row.get("Apellidos", "").strip(),
@@ -366,3 +372,30 @@ def ver_exportados(request):
                   {"respuestas": respuestas_borrador,
                            "query": query,
                    })
+
+@login_required
+def descargar_csv(request):
+    try:
+        # Cargar credenciales
+        gc = gspread.service_account(filename=os.path.join(BASE_DIR, "credenciales.json"))
+
+        # Abrir la hoja de cálculo
+        spreadsheet_id = "1FAwouU6tt4NxF-9KTp-MrwHnSHIhJKuWDtxCjhYJfIE"
+        hoja = gc.open_by_key(spreadsheet_id).sheet1
+
+        # Obtener datos y guardarlos como CSV
+        datos = hoja.get_all_records()
+        df = pd.DataFrame(datos)
+        desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+        csv_path = os.path.join(desktop_path, "respuestas_form.csv")
+        df.to_csv(csv_path, index=False)
+
+        # Mensaje de éxito
+        messages.success(request, f"✅ Archivo CSV guardado en: {csv_path}")
+
+    except Exception as e:
+        messages.error(request, f"⚠ Error al descargar el CSV: {str(e)}")
+
+    return redirect("importar_csv")  # Redirige a la vista adecuada
+
+
