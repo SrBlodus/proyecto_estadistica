@@ -2,10 +2,23 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.contrib.auth import logout
+from django.db.models import Count
+from .models import Respuesta_oficial, Facultad
 
 def inicio(request):
-    return render(request, "inicio.html")
+    # Total de encuestados
+    total_encuestados = Respuesta_oficial.objects.count()
 
+    # Encuestados por facultad
+    encuestados_por_facultad = Facultad.objects.annotate(total_encuestados=Count("respuesta_oficial"))
+
+
+    context = {
+        "total_encuestados": total_encuestados,
+        "encuestados_por_facultad": encuestados_por_facultad,
+    }
+
+    return render(request, "inicio.html", context)
 
 
 class CustomLoginView(LoginView):

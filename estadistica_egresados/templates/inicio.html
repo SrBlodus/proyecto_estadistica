@@ -1,8 +1,61 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Página de Inicio{% endblock %}
 
 {% block content %}
-    <h1>Dashboard</h1>
-    <p>Aquí podemos agregar algunas estadisticas definidas.</p>
+<h1>📊 Dashboard</h1>
+<!-- Contenedor principal para la distribución -->
+<div class="dashboard-container">
+    <!-- Sección de datos a la izquierda -->
+    <div class="data-section">
+        <h3>Total Encuestados</h3>
+        <p>{{ total_encuestados }}</p>
+
+        <h3>Encuestados por Facultad</h3>
+        <ul>
+            {% for facultad in encuestados_por_facultad %}
+                <li>{{ facultad.descripcion }}: {{ facultad.total_encuestados }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Sección del gráfico a la derecha -->
+    <div class="chart-section">
+        <canvas id="facultadesChart"></canvas>
+    </div>
+
+</div>
+
+<!-- Script para generar el gráfico -->
+<script src="{% static 'js/chart.js' %}"></script>
+<script>
+    var ctx = document.getElementById('facultadesChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [{% for facultad in encuestados_por_facultad %}"{{ facultad.descripcion }}",{% endfor %}],
+            datasets: [{
+                label: 'Encuestados por Facultad',
+                data: [{% for facultad in encuestados_por_facultad %}{{ facultad.total_encuestados }},{% endfor %}],
+                backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                borderColor: 'blue',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,  // Solo números enteros
+                        precision: 0  // Sin decimales
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+
 {% endblock %}
