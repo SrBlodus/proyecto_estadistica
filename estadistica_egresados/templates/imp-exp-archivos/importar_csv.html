@@ -3,28 +3,38 @@
 {% block title %}Importar CSV{% endblock %}
 
 {% block content %}
-<h2>📂 Subir Archivo CSV</h2>
-{% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}" style="padding: 10px; margin-bottom: 10px;">
-            {{ message }}
-        </div>
-    {% endfor %}
-{% endif %}
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">🚀 Importar</button>
-</form>
-<a href="{% url 'descargar_csv' %}">
-    <button style="background-color: #4CAF50; color: white; border: none; padding: 10px; cursor: pointer;">
-        📥 Descargar CSV
-    </button>
-</a>
+    <h2>📂 Subir Archivo CSV</h2>
 
-<div style="margin-top: 20px;">
-    <a href="{% url 'inicio_imp_exp_archivos' %}" style="text-decoration: none;">
-        <button style="background-color: #ddd; border: none; padding: 10px; cursor: pointer;">⬅ Volver</button>
-    </a>
-</div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" style="padding: 10px; margin-bottom: 10px;">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Sección de Importación y Descarga, con botones en línea -->
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" style="background-color: #2196F3; color: white; padding: 10px; border: none; cursor: pointer;">
+                🚀 Importar
+            </button>
+        </form>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+        <a href="{% url 'descargar_csv' %}" style="text-decoration: none;">
+            <button style="background-color: #4CAF50; color: white; border: none; padding: 10px; cursor: pointer;">
+                📥 Descargar CSV
+            </button>
+        </a>
+    </div>
+
+    <!-- Botón "Volver" en su posición original -->
+    <div style="margin-top: 20px;">
+        <a href="{% url 'inicio_imp_exp_archivos' %}" style="text-decoration: none;">
+            <button style="background-color: #ddd; border: none; padding: 10px; cursor: pointer;">⬅ Volver</button>
+        </a>
+    </div>
 {% endblock %}
