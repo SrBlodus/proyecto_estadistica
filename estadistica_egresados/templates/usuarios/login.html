@@ -3,12 +3,13 @@
 {% block title %}Inicio de Sesión{% endblock %}
 
 {% block content %}
-<h2>🔐 Inicio de Sesión</h2>
+<div class="login-container">
+    <h2>🔐 Inicio de Sesión</h2>
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" style="background-color: #4CAF50; color: white; border: none; padding: 10px;">🔑 Iniciar Sesión</button>
-</form>
-
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">🔑 Iniciar Sesión</button>
+    </form>
+</div>
 {% endblock %}

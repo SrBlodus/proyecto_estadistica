@@ -3,23 +3,505 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Mi Aplicación{% endblock %}</title>
-    <style>
-        body {
-            display: flex;
-            margin: 0;
-        }
-        .sidebar {
-            width: 250px;
-            height: 100vh;
-            background-color: #f4f4f4;
-            padding: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        }
-        .content {
-            flex-grow: 1;
-            padding: 20px;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+    * {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    height: 100vh;
+    background-color: #f0f2f5;
+    color: #2d2d2d;
+}
+
+.sidebar {
+    width: 240px;
+    background-color: #1e1e2f;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 30px 20px;
+    box-shadow: 3px 0 6px rgba(0, 0, 0, 0.2);
+    min-height: 100vh;
+}
+
+.sidebar-title {
+    font-size: 1.3rem;
+    margin-bottom: 25px;
+    font-weight: 600;
+    color: #0dcaf0;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: auto;
+}
+
+.nav-item {
+    color: #dcdcdc;
+    padding: 10px 14px;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+}
+
+.nav-item:hover {
+    background-color: #2e2e40;
+    color: #fff;
+}
+
+.sidebar-footer {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.welcome-text {
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.logout-button {
+    background-color: #dc3545;
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    width: 100%;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    background-color: #bb2d3b;
+}
+
+.admin-button {
+    display: block;
+    background-color: #198754;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.admin-button:hover {
+    background-color: #157347;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #1a1a1a;
+}
+
+.dashboard-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-top: 30px;
+}
+
+.data-section {
+    flex: 1;
+    min-width: 300px;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.data-section h3 {
+    margin-top: 10px;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.data-section ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.data-section li {
+    padding: 6px 0;
+    border-bottom: 1px solid #e2e2e2;
+}
+
+.chart-section {
+    flex: 2;
+    min-width: 400px;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+canvas {
+    width: 100%;
+    height: auto;
+}
+
+.page-title {
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: fadeIn 0.6s ease-out;
+}
+
+.highlight {
+    color: #0d6efd;
+    font-weight: 700;
+}
+
+@keyframes fadeIn {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Estilo para formularios multipaso */
+.form-wizard {
+    position: relative;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+    margin-top: 20px;
+}
+
+.form-step {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.form-step.active {
+    display: block;
+}
+
+.form-step h3 {
+    margin-bottom: 20px;
+    font-size: 1.25rem;
+    color: #0d6efd;
+    border-bottom: 2px solid #0d6efd;
+    padding-bottom: 6px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+input[type="text"], select, textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 0.95rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #0d6efd;
+    background-color: #fff;
+}
+
+.wizard-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.wizard-nav button {
+    background-color: #0d6efd;
+    border: none;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.wizard-nav button:hover {
+    background-color: #0b5ed7;
+}
+
+.submit-btn {
+    display: block;
+    background-color: #198754;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-weight: 600;
+    margin: 40px auto 0;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.submit-btn:hover {
+    background-color: #157347;
+}
+
+/* Tablas de resultados */
+.result-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 40px;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #212529;
+}
+
+.result-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    font-size: 0.95rem;
+}
+
+.result-table th, .result-table td {
+    padding: 14px 18px;
+    border-bottom: 1px solid #e9ecef;
+    text-align: left;
+}
+
+.result-table th {
+    background-color: #f8f9fa;
+    color: #333;
+    font-weight: 600;
+}
+
+.result-table tr:hover {
+    background-color: #f1f3f5;
+}
+
+/* Comentarios y listas */
+ul {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    list-style: disc;
+    padding-left: 30px;
+}
+
+ul li {
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+}
+
+h2, h3 {
+    margin-top: 40px;
+    color: #2c3e50;
+}
+
+
+/* Contenedor del encabezado y formulario */
+.encuestados-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.encuestados-header h2 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.search-form input[type="text"] {
+    padding: 10px 14px;
+    width: 300px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease;
+}
+
+.search-form input[type="text"]:focus {
+    border-color: #0d6efd;
+    background-color: #fff;
+    outline: none;
+}
+
+.search-form button {
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.search-form button:hover {
+    background-color: #0b5ed7;
+}
+
+/* Estilo tabla */
+.table-container {
+    background: #fff;
+    border-radius: 10px;
+    overflow-x: auto;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.table-encuestados {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    min-width: 1000px;
+}
+
+.table-encuestados thead {
+    background-color: #f8f9fa;
+    color: #343a40;
+}
+
+.table-encuestados th,
+.table-encuestados td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #dee2e6;
+    text-align: left;
+}
+
+.table-encuestados tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+/* Estilo de mensaje de error */
+.alert-error {
+    background-color: #ffe3e3;
+    color: #d32f2f;
+    padding: 12px 16px;
+    border-left: 4px solid #f44336;
+    border-radius: 6px;
+    margin-top: 20px;
+    font-weight: 500;
+}
+
+    .login-container {
+    max-width: 400px;
+    margin: 60px auto;
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+.login-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.login-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.login-container label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.login-container input[type="text"],
+.login-container input[type="password"] {
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    transition: border-color 0.2s;
+}
+
+.login-container input:focus {
+    outline: none;
+    border-color: #0d6efd;
+    background-color: #fff;
+}
+
+.login-container button {
+    background-color: #198754;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.login-container button:hover {
+    background-color: #157347;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+</style>
+
+
 </head>
 <body>
 
@@ -28,6 +510,35 @@
     <div class="content">
         {% block content %} {% endblock %}  <!-- Aquí se insertará el contenido específico de cada vista -->
     </div>
+
+<script>
+    let currentStep = 1;
+    const totalSteps = 3;
+
+    function showStep(step) {
+        for (let i = 1; i <= totalSteps; i++) {
+            document.getElementById(`step-${i}`).classList.remove('active');
+        }
+        document.getElementById(`step-${step}`).classList.add('active');
+    }
+
+    document.getElementById('nextStep').addEventListener('click', function () {
+        if (currentStep < totalSteps) {
+            currentStep++;
+            showStep(currentStep);
+        }
+    });
+
+    document.getElementById('prevStep').addEventListener('click', function () {
+        if (currentStep > 1) {
+            currentStep--;
+            showStep(currentStep);
+        }
+    });
+
+    // Mostrar primer paso al cargar
+    showStep(currentStep);
+</script>
 
 </body>
 </html>

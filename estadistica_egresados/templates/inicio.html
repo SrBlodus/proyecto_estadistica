@@ -4,7 +4,10 @@
 {% block title %}Página de Inicio{% endblock %}
 
 {% block content %}
-<h1>📊 Dashboard</h1>
+<h1 class="page-title">
+    📊 {% if user.is_authenticated %}Hola, <span class="highlight">{{ user.first_name|default:user.username }}</span>{% else %}Dashboard{% endif %}
+</h1>
+
 <!-- Contenedor principal para la distribución -->
 <div class="dashboard-container">
     <!-- Sección de datos a la izquierda -->

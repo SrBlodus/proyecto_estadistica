@@ -5,6 +5,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 import csv
 import pandas as pd
+import io
 
 from PROYECTO_GRAL.settings import BASE_DIR
 from .models import Respuesta_borrador, Respuesta_oficial, Facultad, Carrera, CampusSede, Genero, EstadoCivil, Pais, \
@@ -376,26 +377,28 @@ def ver_exportados(request):
 @login_required
 def descargar_csv(request):
     try:
-        # Cargar credenciales
+        # Conectar con Google Sheets
         gc = gspread.service_account(filename=os.path.join(BASE_DIR, "credenciales.json"))
-
-        # Abrir la hoja de cálculo
         spreadsheet_id = "1FAwouU6tt4NxF-9KTp-MrwHnSHIhJKuWDtxCjhYJfIE"
         hoja = gc.open_by_key(spreadsheet_id).sheet1
 
-        # Obtener datos y guardarlos como CSV
+        # Obtener datos
         datos = hoja.get_all_records()
         df = pd.DataFrame(datos)
-        desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
-        csv_path = os.path.join(desktop_path, "respuestas_form.csv")
-        df.to_csv(csv_path, index=False)
 
-        # Mensaje de éxito
-        messages.success(request, f"✅ Archivo CSV guardado en: {csv_path}")
+        # Crear un archivo CSV en memoria sin guardarlo localmente
+        csv_buffer = io.StringIO()
+        df.to_csv(csv_buffer, index=False)
+        csv_buffer.seek(0)  # Resetear el puntero del archivo
+
+        # Configurar la respuesta HTTP para descargar el archivo directamente
+        response = HttpResponse(csv_buffer.getvalue(), content_type="text/csv")
+        response["Content-Disposition"] = 'attachment; filename="respuestas_form.csv"'
+
+        return response
 
     except Exception as e:
-        messages.error(request, f"⚠ Error al descargar el CSV: {str(e)}")
+        return HttpResponse(f"⚠ Error al generar el CSV: {str(e)}", status=500)
 
-    return redirect("importar_csv")  # Redirige a la vista adecuada
 
 

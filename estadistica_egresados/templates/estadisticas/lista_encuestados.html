@@ -8,52 +8,57 @@
         <button style="background-color: #ddd; border: none; padding: 10px; cursor: pointer;">⬅ Volver</button>
     </a>
 </div>
-<h2>📋 Lista de Encuestados</h2>
 
+<div class="encuestados-header">
+    <h2>📋 Lista de Encuestados</h2>
+</div>
 
-<form method="GET">
-    <input type="text" name="q" placeholder=" Buscar por nombre, apellido o documento" value="{{ query }}">
-    <button type="submit">🔎 Buscar</button>
+<form method="GET" class="search-form">
+    <input type="text" name="q" placeholder="Buscar por nombre, apellido o documento" value="{{ query }}">
+    <button type="submit">🔍 Buscar</button>
 </form>
 
-<hr>
-
 {% if encuestados %}
-    <table border="1" style="width: 100%; border-collapse: collapse;">
-        <tr style="background-color: #f4f4f4;">
-            <th>Fecha Encuesta</th>
-            <th>Nombres</th>
-            <th>Nº C.I.</th>
-            <th>Correo</th>
-            <th>Nº Teléfono</th>
-            <th>Género</th>
-            <th>Estado Civil</th>
-            <th>País de Residencia</th>
-            <th>Ciudad de Residencia</th>
-            <th>Campus/Sede</th>
-            <th>Facultad</th>
-            <th>Carrera</th>
-        </tr>
-
-        {% for encuestado in encuestados %}
-        <tr>
-            <td>{{ encuestado.fecha_hora_encuesta }}</td>
-            <td>{{ encuestado.apellidos }}, {{ encuestado.nombres }}</td>
-            <td>{{ encuestado.nro_documento }}</td>
-            <td>{{ encuestado.correo }}</td>
-            <td>{{ encuestado.nro_telefono }}</td>
-            <td>{{ encuestado.genero.descripcion }}</td>
-            <td>{{ encuestado.estado_civil.descripcion }}</td>
-            <td>{{ encuestado.pais.descripcion }}</td>
-            <td>{{ encuestado.ciudad }}</td>
-            <td>{{ encuestado.campus_sede.descripcion }}</td>
-            <td>{{ encuestado.facultad.descripcion }}</td>
-            <td>{{ encuestado.carrera.descripcion }}</td>
-        </tr>
-        {% endfor %}
+<div class="table-container">
+    <table class="table-encuestados">
+        <thead>
+            <tr>
+                <th>Fecha Encuesta</th>
+                <th>Nombres</th>
+                <th>Nº C.I.</th>
+                <th>Correo</th>
+                <th>Nº Teléfono</th>
+                <th>Género</th>
+                <th>Estado Civil</th>
+                <th>País de Residencia</th>
+                <th>Ciudad</th>
+                <th>Campus/Sede</th>
+                <th>Facultad</th>
+                <th>Carrera</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for encuestado in encuestados %}
+            <tr>
+                <td>{{ encuestado.fecha_hora_encuesta }}</td>
+                <td>{{ encuestado.apellidos }}, {{ encuestado.nombres }}</td>
+                <td>{{ encuestado.nro_documento }}</td>
+                <td>{{ encuestado.correo }}</td>
+                <td>{{ encuestado.nro_telefono }}</td>
+                <td>{{ encuestado.genero.descripcion }}</td>
+                <td>{{ encuestado.estado_civil.descripcion }}</td>
+                <td>{{ encuestado.pais.descripcion }}</td>
+                <td>{{ encuestado.ciudad }}</td>
+                <td>{{ encuestado.campus_sede.descripcion }}</td>
+                <td>{{ encuestado.facultad.descripcion }}</td>
+                <td>{{ encuestado.carrera.descripcion }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
+</div>
 {% else %}
-    <p style="color: red;">⚠ No se encontraron encuestados con los criterios de búsqueda.</p>
+<p class="alert-error">⚠ No se encontraron encuestados con los criterios de búsqueda.</p>
 {% endif %}
 
 {% endblock %}

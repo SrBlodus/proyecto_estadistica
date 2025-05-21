@@ -10,9 +10,9 @@
 </div>
 <h2>📊 Consulta de Estadísticas de Egresados</h2>
 
-<form method="GET" class="form-container">
+<form method="GET" class="form-wizard">
 
-    <div class="form-section">
+    <div class="form-step active" id="step-1">
         <h3>Filtros por Datos Generales</h3>
         <div class="form-group">{{ form.facultad.label_tag }} {{ form.facultad }}</div>
         <div class="form-group">{{ form.carrera.label_tag }} {{ form.carrera }}</div>
@@ -27,7 +27,7 @@
 
     </div>
 
-    <div class="form-section">
+    <div class="form-step" id="step-2">
         <h3>Filtros por Situación Laboral</h3>
         <div class="form-group">{{ form.trabaja_actualmente.label_tag }} {{ form.trabaja_actualmente }}</div>
         <div class="form-group">{{ form.ano_primer_empleo_min.label_tag }} {{ form.ano_primer_empleo_min }}</div>
@@ -43,7 +43,7 @@
 
     </div>
 
-    <div class="form-section">
+    <div class="form-step" id="step-3">
         <h3>Filtros por Vínculos con la Universidad</h3>
         <div class="form-group">{{ form.ind_participa_actividad_egresado.label_tag }} {{ form.ind_participa_actividad_egresado }}</div>
         <div class="form-group">{{ form.ind_interes_participar_actividad_egresado.label_tag }} {{ form.ind_interes_participar_actividad_egresado }}</div>
@@ -54,7 +54,15 @@
         <div class="form-group">{{ form.opcional_contacto_carrera.label_tag }} {{ form.opcional_contacto_carrera }}</div>
     </div>
 
-    <button type="submit" class="submit-btn">🔍 Buscar</button>
+    <div class="wizard-nav">
+    <button type="button" id="prevStep">⬅ Anterior</button>
+    <button type="button" id="nextStep">Siguiente ➡</button>
+</div>
+
+
+    <div style="margin-top: 20px;">
+      <button type="submit" class="submit-btn">🔍 Buscar</button>
+  </div>
 </form>
 
 
