@@ -28,6 +28,11 @@
         <canvas id="facultadesChart"></canvas>
     </div>
 
+    <!-- Gráfico de Facultad y Género -->
+    <div class="chart-section">
+        <canvas id="facultadGeneroChart"></canvas>
+    </div>
+
 </div>
 
 <!-- Script para generar el gráfico -->
@@ -53,6 +58,34 @@
                     ticks: {
                         stepSize: 1,  // Solo números enteros
                         precision: 0  // Sin decimales
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+<script>
+    var ctx2 = document.getElementById('facultadGeneroChart').getContext('2d');
+    var facultadGeneroChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: [{% for item in encuestados_por_genero %}"{{ item.facultad__descripcion }} - {{ item.genero__descripcion }}",{% endfor %}],
+            datasets: [{
+                label: 'Egresados por Facultad y Género',
+                data: [{% for item in encuestados_por_genero %}{{ item.total }},{% endfor %}],
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                borderColor: 'red',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,  
+                        precision: 0  
                     }
                 }
             }
