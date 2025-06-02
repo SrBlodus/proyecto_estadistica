@@ -33,6 +33,10 @@
         <canvas id="facultadGeneroChart"></canvas>
     </div>
 
+    <div class="chart-section">
+        <canvas id="facultadPaisChart"></canvas>
+    </div>
+
 </div>
 
 <!-- Script para generar el gráfico -->
@@ -86,6 +90,43 @@
                     ticks: {
                         stepSize: 1,  
                         precision: 0  
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+<script>
+    var ctx3 = document.getElementById('facultadPaisChart').getContext('2d');
+    var facultadPaisChart = new Chart(ctx3, {
+        type: 'bar',
+        data: {
+            labels: [{% for item in encuestados_por_pais %}"{{ item.facultad__descripcion }}",{% endfor %}],
+            datasets: [
+                {
+                    label: 'Paraguay',
+                    data: [{% for item in encuestados_por_pais %}{{ item.total_paraguay }},{% endfor %}],
+                    backgroundColor: 'rgba(0, 200, 0, 0.5)',
+                    borderColor: 'green',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Otros países',
+                    data: [{% for item in encuestados_por_pais %}{{ item.total_extranjero }},{% endfor %}],
+                    backgroundColor: 'rgba(200, 0, 0, 0.5)',
+                    borderColor: 'red',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        precision: 0
                     }
                 }
             }
