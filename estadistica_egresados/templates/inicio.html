@@ -70,29 +70,51 @@
 </script>
 
 <script>
-    var ctx2 = document.getElementById('facultadGeneroChart').getContext('2d');
-    var facultadGeneroChart = new Chart(ctx2, {
+    var ctx = document.getElementById('facultadGeneroChart').getContext('2d');
+
+    var facultades = [];
+    var generoLabels = [];
+    var generoData = {};
+
+    {% for item in encuestados_por_genero %}
+        if (!facultades.includes("{{ item.facultad__descripcion }}")) {
+            facultades.push("{{ item.facultad__descripcion }}");
+        }
+        if (!generoLabels.includes("{{ item.genero__descripcion }}")) {
+            generoLabels.push("{{ item.genero__descripcion }}");
+        }
+        if (!generoData["{{ item.genero__descripcion }}"]) {
+            generoData["{{ item.genero__descripcion }}"] = [];
+        }
+        generoData["{{ item.genero__descripcion }}"].push({{ item.total }});
+    {% endfor %}
+
+    var datasets = [];
+    var colores = ["rgba(255, 99, 132, 0.5)", "rgba(54, 162, 235, 0.5)", "rgba(255, 206, 86, 0.5)"];
+
+    for (var i = 0; i < generoLabels.length; i++) {
+        datasets.push({
+            label: generoLabels[i],
+            data: generoData[generoLabels[i]],
+            backgroundColor: colores[i % colores.length],
+            borderColor: colores[i % colores.length].replace("0.5", "1"),
+            borderWidth: 1
+        });
+    }
+
+    var facultadGeneroChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: [{% for item in encuestados_por_genero %}"{{ item.facultad__descripcion }} - {{ item.genero__descripcion }}",{% endfor %}],
-            datasets: [{
-                label: 'Egresados por Facultad y Género',
-                data: [{% for item in encuestados_por_genero %}{{ item.total }},{% endfor %}],
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                borderColor: 'red',
-                borderWidth: 1
-            }]
+            labels: facultades,
+            datasets: datasets
         },
         options: {
             scales: {
                 y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1,  
-                        precision: 0  
-                    }
+                    beginAtZero: true
                 }
-            }
+            },
+            responsive: true
         }
     });
 </script>

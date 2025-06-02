@@ -28,6 +28,7 @@ def inicio(request):
         Respuesta_oficial.objects
         .values("facultad__descripcion", "genero__descripcion")
         .annotate(total=Count("id"))
+        .order_by("facultad__descripcion")  # Aseguramos que los datos estén organizados
     )
 
 
